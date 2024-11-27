@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style>
+    /* Internal styles for better appearance */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .profile-container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+    .success {
+      color: green;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 1rem;
+      color: #555;
+      margin: 10px 0;
+    }
+    img {
+      display: block;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 10px auto;
+    }
+    .btn {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 10px 0;
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    form {
+      margin-top: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 4px rgba(52, 152, 219, 0.4);
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+  <div class="profile-container">
+    <h1>Profile</h1>
+    
+    <!-- Display error message -->
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+    
+    <!-- Display success message -->
+    <!-- <% if (success) { %>
+      <div class="success"><%= success %></div>
+    <% } %> -->
+
+    <p>Name: <%= name %></p>
+    <p>Email: <%= email %></p>
+    <p>Job Positions: <%= jobPositions.join(', ') %></p>
+    <p>Profile Photo:</p>
+    <img src="<%= profilePhoto %>" alt="Profile Photo">
+
+    <a href="/student/change-password" class="btn">Change Password</a>
+    <a href="/student/dashboard" class="btn">Back to Dashboard</a>
+
+    <form action="/student/update-profile" method="POST">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="<%= name %>" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="<%= email %>" required>
+      </div>
+      <div class="form-group">
+        <label for="jobPositions">Job Positions</label>
+        <select name="jobPositions[]" id="jobPositions" multiple="multiple">
+          <% jobOptions.forEach(option => { %>
+            <option value="<%= option %>" <%= jobPositions.includes(option) ? 'selected' : '' %>><%= option %></option>
+          <% }) %>
+        </select>
+      </div>
+      <button type="submit" class="btn">Update Profile</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      $('#jobPositions').select2({
+        placeholder: "Select or add job positions",
+        tags: true,
+        tokenSeparators: [',', ' ']
+      });
+    });
+  </script>
+</body>
+</html>
