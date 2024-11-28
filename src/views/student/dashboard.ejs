@@ -1,198 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-  <style>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+      .loading-spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+        margin: 0 auto;
+      }
     
-    body {
-  font-family: Arial, sans-serif;
-}
-
-#spacesContainer {
-  margin-top: 20px;
-}
-
-.spaceBox {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-.spaceBox h3 {
-  margin: 0 0 10px;
-}
-
-.spaceBox ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.spaceBox li {
-  margin: 10px 0;
-}
-
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-
-    .modal-header {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    /* Button styles */
-    .btn {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
-
-<style>
-  .loading-spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 2s linear infinite;
-    margin: 0 auto;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-</style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
 
 </head>
-<body>
-  <div>
-    <button id="createSpaceButton" class="btn">Create Space</button>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                    
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                    src="/img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Change Password
+                                </a>
+                          
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createSpaceModal" ><i
+                                class="fas fa-download fa-sm text-white-50"></i>Create Space</a>
+                    </div>
+
+               
+                      <div class="row">
+                          <% spaces.forEach(space => { %>
+                              <!-- Space Card -->
+                              <div class="col-xl-3 col-md-6 mb-4">
+                                <a href="/student/spaces/detail/<%= space._id %>" class="text-decoration-none">
+
+                                  <div  class="card border-left-primary shadow h-100 py-2">
+                                      <div class="card-body">
+                                          <div class="row no-gutters align-items-center">
+                                              <div class="col mr-2">
+                                                  <!-- Job Position and Company -->
+                                                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                      <%= space.jobPosition %>
+                                                  </div>
+                                                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                      <%= space.companyName %>
+                                                  </div>
+                  
+                                                  <!-- Interview Rounds -->
+                                                  <small class="text-muted">
+                                                      Rounds: 
+                                                      <% space.interviewRounds.forEach(round => { %>
+                                                          <span><%= round.name %>: <%= round.status %></span><% if (space.interviewRounds.indexOf(round) !== space.interviewRounds.length - 1) { %>, <% } %>
+                                                      <% }) %>
+                                                  </small>
+                                              </div>
+                                              <!-- Info Icon -->
+                                              <div class="col-auto">
+                                                  <i class="fas fa-info-circle fa-2x text-gray-300" 
+                                                     data-toggle="tooltip" 
+                                                     data-placement="top" 
+                                                     title="<%= space.resumeSummary %>"></i>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                </a>
+                              </div>
+                          <% }) %>
+                      </div>
+                
+                  
+                  <script>
+                      // Initialize tooltips
+                      $(document).ready(function() {
+                          $('[data-toggle="tooltip"]').tooltip();
+                      });
+                  </script>
+                  
+
+          
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="student/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Space Modal-->
+  <div class="modal fade" id="createSpaceModal" tabindex="-1" role="dialog" aria-labelledby="createSpaceModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="createSpaceModalLabel">Create a New Space</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form id="createSpaceForm" method="POST" action="/student/spaces/create" enctype="multipart/form-data">
+                  <div class="form-group">
+                      <label for="companyName">Company Name</label>
+                      <input type="text" class="form-control" id="companyName" name="companyName" required />
+                  </div>
+                  <div class="form-group">
+                      <label for="jobPosition">Job Position</label>
+                      <input type="text" class="form-control" id="jobPosition" name="jobPosition" required />
+                  </div>
+                  <div class="form-group">
+                      <label for="jobDescription">Job Description</label>
+                      <textarea class="form-control" id="jobDescription" name="jobDescription" required></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="interviewRounds">Select Interview Rounds</label>
+                      <select class="form-control select2" id="interviewRounds" name="interviewRounds[]" multiple="multiple"
+                          style="width: 100%;">
+                          <option value="HR">HR</option>
+                          <option value="Technical">Technical</option>
+                          <option value="Aptitude">Aptitude</option>
+                          <!-- Add more options here -->
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="resume">Upload Resume</label>
+                      <input type="file" class="form-control-file" id="resume" name="resume" accept=".pdf,.doc,.docx"
+                          required />
+                  </div>
+                  <!-- Circular Loading Indicator -->
+                  <div id="loading" style="display: none; text-align: center;">
+                      <div class="spinner-border text-primary" role="status">
+                          <span class="sr-only">Loading...</span>
+                      </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Create Space</button>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          </div>
+      </div>
+  </div>
   </div>
 
-<!-- Modal for Create Space -->
-<div id="createSpaceModal" class="modal">
-  <div class="modal-content">
-    <span id="closeModal" style="float: right; cursor: pointer;">&times;</span>
-    <h3>Create a New Space</h3>
-    <form id="createSpaceForm" method="POST" action="/student/spaces/create" enctype="multipart/form-data">
-      <div>
-        <label for="companyName">Company Name</label>
-        <input type="text" id="companyName" name="companyName" required />
-      </div>
-      <div>
-        <label for="jobPosition">Job Position</label>
-        <input type="text" id="jobPosition" name="jobPosition" required />
-      </div>
-      <div>
-        <label for="jobDescription">Job Description</label>
-        <textarea id="jobDescription" name="jobDescription" required></textarea>
-      </div>
-      <div>
-        <label for="interviewRounds">Select Interview Rounds</label>
-        <select id="interviewRounds" name="interviewRounds" multiple="multiple" style="width: 100%;">
-          <option value="HR">HR</option>
-          <option value="Technical">Technical</option>
-          <option value="Aptitude">Aptitude</option>
-          <!-- More rounds here -->
-        </select>
-      </div>
-      <div>
-        <label for="resume">Upload Resume</label>
-        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required />
-      </div>
 
-      <!-- Circular Loading Indicator -->
-      <div id="loading" style="display: none;">
-        <div class="loading-spinner"></div> <!-- Create a spinner here -->
-      </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-      <button type="submit" class="btn">Create Space</button>
-    </form>
-  </div>
-</div>
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<script>
-  document.getElementById('createSpaceForm').addEventListener('submit', function(event) {
-    // Show the loading spinner when the form is submitted
-    document.getElementById('loading').style.display = 'block';
-  });
-</script>
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
 
-  <!-- Existing spaces -->
-  <div id="spacesContainer">
-    <% spaces.forEach(space => { %>
-      <div class="spaceBox">
-        <h3><%= space.companyName %> - <%= space.jobPosition %></h3>
-        <ul>
-          <% space.interviewRounds.forEach(round => { %>
-            <li>
-              <%= round.name %> - <%= round.status %>
-              <% if (round.status === 'not completed') { %>
-                <form action="/student/spaces/start-round/<%= space._id %>/<%= round.name %>" method="POST">
-                  <button class="btn" type="submit">Start Interview</button>
-                </form>
-              <% } else { %>
-                <p>Summary: <%= round.summary %></p>
-              <% } %>
-            </li>
-          <% }) %>
-        </ul>
-      </div>
-    <% }) %>
-  </div>
+    <!-- Page level plugins -->
+    <script src="/vendor/chart.js/Chart.min.js"></script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Initialize Select2 for dropdown
-      $('#interviewRounds').select2();
+    <!-- Page level custom scripts -->
+    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-pie-demo.js"></script>
 
-      // Show the modal
-      $('#createSpaceButton').on('click', function () {
-        $('#createSpaceModal').show();
-      });
-
-      // Close the modal
-      $('#closeModal').on('click', function () {
-        $('#createSpaceModal').hide();
-      });
-
-      // Hide modal if clicked outside
-      $(window).on('click', function (event) {
-        if ($(event.target).is('#createSpaceModal')) {
-          $('#createSpaceModal').hide();
-        }
-      });
-    });
-  </script>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
