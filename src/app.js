@@ -45,7 +45,7 @@ app.use('/', homeRoutes);
 
 // 404 Handler
 app.use((req, res) => {
-  res.status(404).render('pages/404', { title: '404 - Page Not Found' });
+  res.status(404).render('pages/404', { layout: 'layouts/f-main', title: '404 - Page Not Found' });
 });
 
 // Global error handler
