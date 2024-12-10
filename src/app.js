@@ -1,39 +1,57 @@
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
+const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+require('dotenv').config(); // Load environment variables
+
+// Import routes
 const studentRoutes = require('./routes/studentRoutes');  
 const homeRoutes = require('./routes/homeRoutes'); 
 
 const app = express();
 
-const session = require('express-session');
-
+// Session middleware
 app.use(
   session({
-    secret: 'f3e2db3f8f4544f9c9b9ac8c3d5f72e02c4d5986d15abbdc6c3e7fd3e5c0e10b', 
-    resave: false, // Don't save session if nothing has changed
-    saveUninitialized: false, // Don't create empty sessions
+    secret: process.env.SESSION_SECRET || 'defaultSecret', // Use environment variable for session secret
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === 'production', // Secure cookies in production
-      httpOnly: true, // Prevent access by JavaScript
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
 );
 
 // Middleware to parse JSON and form data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Set views directory (views are inside the 'src/views' folder)
-app.set('views', path.join(__dirname, 'views')); // Correct the path to 'views' here
-app.set('view engine', 'ejs'); // Use EJS as the templating engine
+// Set views directory and view engine
+app.set('views', path.join(__dirname, 'views')); 
+app.set('view engine', 'ejs'); 
 
-// Serve static files from the 'public' directory (CSS, JS, images)
-app.use(express.static(path.join(__dirname, '../public')));  // Correct the path to 'public' here
+// Express-EJS-Layouts setup
+app.use(expressLayouts);
+app.set('layout', 'layouts/main'); 
 
-// Define routes for the app
+// Serve static files
+app.use(express.static(path.join(__dirname, '../public'))); 
+
+// Define routes
 app.use('/student', studentRoutes); 
 app.use('/', homeRoutes); 
+
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).render('pages/404', { title: '404 - Page Not Found' });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
 
 module.exports = app;
