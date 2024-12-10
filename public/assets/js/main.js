@@ -828,16 +828,16 @@ function generateAutoReply() {
     const userMessage = txtarea.value.trim();
     if (userMessage === '') return;
 
-    const userMessageElement = createEditableMessage('You', userMessage, 'author-speech', 'assets/images/team/team-01.jpg');
+    const userMessageElement = createEditableMessage('You', userMessage, 'author-speech', '/assets/images/team/team-01.jpg');
     appendMessage(userMessageElement);
 
     if (welcomeMessageIndex < welcomeMessages.length) {
-      const welcomeMessageElement = createMessageWithReactions('ChatenAI', welcomeMessages[welcomeMessageIndex], 'ai-speech', 'assets/images/team/avater.png');
+      const welcomeMessageElement = createMessageWithReactions('ChatenAI', welcomeMessages[welcomeMessageIndex], 'ai-speech', '/assets/images/team/avater.png');
       appendMessage(welcomeMessageElement);
       welcomeMessageIndex++;
     } else {
       const autoReply = generateAutoReply();
-      const autoReplyElement = createMessageWithReactions('ChatenAI', autoReply, 'ai-speech', 'assets/images/team/avater.png');
+      const autoReplyElement = createMessageWithReactions('ChatenAI', autoReply, 'ai-speech', '/assets/images/team/avater.png');
       appendMessage(autoReplyElement);
     }
 
@@ -943,7 +943,7 @@ function generateAutoReply() {
 
     // Regenerate a new message
     const regeneratedMessage = generateAutoReply();
-    const regeneratedMessageElement = createMessageWithReactions('ChatenAI', regeneratedMessage, 'ai-speech', 'assets/images/team/avater.png');
+    const regeneratedMessageElement = createMessageWithReactions('ChatenAI', regeneratedMessage, 'ai-speech', '/assets/images/team/avater.png');
     appendMessage(regeneratedMessageElement);
   }
 
@@ -956,7 +956,7 @@ function generateAutoReply() {
 
   function regenerateMessage() {
     const regeneratedMessage = generateAutoReply();
-    const regeneratedMessageElement = createMessageWithReactions('ChatenAI', regeneratedMessage, 'ai-speech', 'assets/images/team/avater.png');
+    const regeneratedMessageElement = createMessageWithReactions('ChatenAI', regeneratedMessage, 'ai-speech', '/assets/images/team/avater.png');
     appendMessage(regeneratedMessageElement);
   }
 

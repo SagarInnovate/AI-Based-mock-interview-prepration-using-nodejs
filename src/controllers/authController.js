@@ -4,14 +4,15 @@ const transporter = require('../config/email');
 
 // Render the signup page
 const signupView = (req, res) => {
-  res.render('student/auth/signup', { title: 'Signup', error: null });
+  res.render('student/auth/signup', {layout:'layouts/f-main', title: 'Signup', error: null });
+  // res.render('alerts/accountCreated',{layout:'layouts/f-main' ,title:'success'});
 };
 
 // Handle signup logic
 
 const signup = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email,name } = req.body;
 
     // Validate the email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,7 +37,7 @@ const signup = async (req, res) => {
 
     // Create a new student
     const student = await Student.create({
-      name: 'User', // Default name
+      name: name || 'User', // Default name
       email,
       password: generatedPassword,
     });
@@ -68,7 +69,7 @@ const signup = async (req, res) => {
     });
 
     // Redirect to the login page after successful signup
-    res.redirect('/login');
+    res.render('alerts/accountCreated',{layout:'layouts/f-main' ,title:'success'});
   } catch (error) {
     console.error('Error:', error.message);
     res.status(500).render('student/auth/signup', {
@@ -80,13 +81,21 @@ const signup = async (req, res) => {
 
 // Render the login page
 const loginView = (req, res) => {
-  res.render('student/auth/login', {title: 'Login', error: null });
+  res.render('student/auth/login', {layout:'layouts/f-main', title: 'Login', error: null });
 };
 
 // Handle login logic
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Validate email and password
+    if (!email || !password) {
+      return res.status(400).render('student/auth/login', { 
+        title: 'Login', 
+        error: 'Email and password are required.' 
+      });
+    }
 
     // Find the student by email
     const student = await Student.findOne({ email });
@@ -97,14 +106,20 @@ const login = async (req, res) => {
       req.session.name = student.name;
 
       // Redirect to the dashboard after successful login
-      res.redirect('/dashboard');
+      return res.redirect('/dashboard');
     } else {
       // Render login page with error if email or password is invalid
-      res.status(401).render('student/auth/login', {title: 'Login', error: 'Invalid email or password.' });
+      return res.status(401).render('student/auth/login', { 
+        title: 'Login', 
+        error: 'Invalid email or password.' 
+      });
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).render('student/auth/login', { error: 'Server error. Please try again later.' });
+    return res.status(500).render('student/auth/login', { 
+      title: 'Login', 
+      error: 'Server error. Please try again later.' 
+    });
   }
 };
 

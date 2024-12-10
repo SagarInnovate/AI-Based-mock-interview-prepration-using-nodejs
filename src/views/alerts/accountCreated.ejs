@@ -1,0 +1,56 @@
+
+<style>
+    @keyframes pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-icon {
+    margin: 0 auto;
+    display: inline-block;
+    animation: pop 0.5s ease forwards;
+}
+
+</style>
+
+<div id="gradient" class="container mt--60 rbt-shadow-box mt mb--60">
+    <div class="wrapper">
+        <div class="section-title text-center">
+            <h4 class="rbt-title-style-3">Success!</h4>
+        </div>
+
+        <div class="row g-5 justify-content-center">
+            <div class="col-lg-6 text-center">
+                <!-- Animated Green Tick Icon -->
+                <div class="color-box-inner">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle" style="font-size: 100px; color: #28a745; animation: pop 0.5s ease;"></i>
+                    </div>
+                </div>
+
+                <!-- Headline -->
+                <h3 class="mt-4">Credentials Sent Successfully</h3>
+
+                <!-- Small Paragraph -->
+                <p class="mt-3">
+                    We've sent your login credentials to your email address. Please check your inbox for further instructions.
+                </p>
+
+                <div class="button-group mt--50 text-center">
+                    <a class="btn-default btn-large" href="https://mail.google.com">Open Gmail</a>
+                    <a class="btn-default btn-large btn-border " href="/login"><span>
+                            <i class="feather-user"></i>
+                        </span>  Sign In</a>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

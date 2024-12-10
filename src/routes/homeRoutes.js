@@ -10,46 +10,25 @@ const fs = require('fs');
 
 // Protect middleware
 const protect = (req, res, next) => {
-    if (!req.session.studentId) {
-      return res.redirect('/login'); // Redirect unauthenticated users
-    }
-    next();
-  };
+  if (!req.session.studentId) {
+    return res.redirect('/login'); // Redirect unauthenticated users
+  }
+  next();
+};
 
-//home routes
-router.get('/', houseController.home);
-router.get('/about',houseController.about);
-router.get('/contact',houseController.contact);
+// Redirect if authenticated middleware
+const redirectIfAuthenticated = (req, res, next) => {
+  if (req.session.studentId) {
+    return res.redirect('/dashboard'); // Redirect authenticated users
+  }
+  next();
+};
 
-
-//student routes
-router.get('/signup', authController.signupView);
-router.post('/signup', authController.signup);
-router.get('/login', authController.loginView);
-router.post('/login', authController.login);
-router.post('/forgot-password',authController.forgotPasswordForm);
-router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error destroying session:', err);
-      return res.status(500).send('Unable to logout');
-    }
-    res.redirect('/login'); // Redirect to login after logout
-  });
-});
-
-//protected student routes
-
-router.get('/dashboard', protect,spaceController.getSpaces);
-router.get('/profile', studentController.getProfile);
-router.post('/update-profile', studentController.updateProfile);
-router.get('/change-password', protect, studentController.changePasswordView);
-router.post('/change-password', protect, studentController.changePassword);
-
+// Ensure 'Resumes' folder exists
 const resumeFolderPath = path.join(__dirname, '../../public/Resumes');
 if (!fs.existsSync(resumeFolderPath)) {
   fs.mkdirSync(resumeFolderPath, { recursive: true });
-    }
+}
 
 // Multer setup for file uploads
 const storage = multer.diskStorage({
@@ -62,17 +41,43 @@ const storage = multer.diskStorage({
     console.log(`Saving file as: ${uniqueName}`);
     cb(null, uniqueName);
   },
-    });
+});
 
 const upload = multer({ storage });
 
+// Home routes
+router.get('/', houseController.home);
+router.get('/about', houseController.about);
+router.get('/contact', houseController.contact);
 
-router.get('/spaces', protect, (req, res) => {
-    res.redirect('/dashboard'); // Redirect to dashboard
+// Auth routes
+router.get('/signup', redirectIfAuthenticated, authController.signupView);
+router.post('/signup', authController.signup);
+router.get('/login', redirectIfAuthenticated, authController.loginView);
+router.post('/login', authController.login);
+router.post('/forgot-password', authController.forgotPasswordForm);
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).send('Unable to logout');
+    }
+    res.redirect('/login'); // Redirect to login after logout
   });
-router.post('/spaces/create', [protect, upload.single('resume')], spaceController.createSpace);
-router.post('/spaces/start-round/:spaceId/:roundName', protect,spaceController.startRound);
+});
 
-  
+// Protected student routes
+router.get('/dashboard', protect, spaceController.getSpaces);
+router.get('/profile', protect, studentController.getProfile);
+router.post('/update-profile', protect, studentController.updateProfile);
+router.get('/change-password', protect, studentController.changePasswordView);
+router.post('/change-password', protect, studentController.changePassword);
+
+// Space routes
+router.get('/spaces', protect, (req, res) => {
+  res.redirect('/dashboard'); // Redirect to dashboard
+});
+router.post('/spaces/create', [protect, upload.single('resume')], spaceController.createSpace);
+router.post('/spaces/start-round/:spaceId/:roundName', protect, spaceController.startRound);
 
 module.exports = router;
