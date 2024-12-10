@@ -7,7 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="theme-style-mode" content="1"> <!-- 0 == light, 1 == dark -->
 
-        <title><%= title %></title>
+        <title><%= typeof title !== 'undefined' ? title : "AI-MIP" %></title>
+
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href="assets/images/logo/favicon.png">
         <!-- CSS ============================================ -->

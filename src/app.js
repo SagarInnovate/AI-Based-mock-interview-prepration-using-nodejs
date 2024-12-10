@@ -5,7 +5,6 @@ const session = require('express-session');
 require('dotenv').config(); // Load environment variables
 
 // Import routes
-const studentRoutes = require('./routes/studentRoutes');  
 const homeRoutes = require('./routes/homeRoutes'); 
 
 const app = express();
@@ -39,8 +38,7 @@ app.set('layout', 'layouts/main');
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public'))); 
 
-// Define routes
-app.use('/student', studentRoutes); 
+
 app.use('/', homeRoutes); 
 
 // 404 Handler
