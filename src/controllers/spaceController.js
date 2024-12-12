@@ -5,6 +5,10 @@ const fs = require('fs');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 require('dotenv').config();
+const marked = require('marked'); // Add markdown parsing
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom'); // For server-side HTML sanitization
+
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -123,24 +127,54 @@ exports.getSpaces = async (req, res) => {
   }
 };
 
-exports.getSpaceDetails = async (req, res) => {
-  try {
-    const { id } = req.params; // Extract space ID from the route
-    const space = await Space.findById(id);
+
+exports.getSpaceDetails = async (req, res) => {   
+  try {     
+    const { id } = req.params;
+    
+    // Fetch the space with populated data
+    const space = await Space.findById(id);      
 
     if (!space) {
       return res.redirect(`/dashboard?error=${encodeURIComponent('Space not found.')}`);
     }
 
+    // Set up DOMPurify for server-side sanitization
+    const window = new JSDOM('').window;
+    const DOMPurify = createDOMPurify(window);
+
+    // Sanitize and parse markdown for different fields
+    if (space.jobDescription) {
+      space.jobDescription = DOMPurify.sanitize(marked.parse(space.jobDescription));
+    }
+
+    if (space.purifiedSummary) {
+      space.purifiedSummary = DOMPurify.sanitize(marked.parse(space.purifiedSummary));
+    }
+
+    // Process interview rounds
+    if (space.interviewRounds && space.interviewRounds.length > 0) {
+      space.interviewRounds = space.interviewRounds.map(round => {
+        // Only process summary if it exists and the round is not 'not completed'
+        if (round.summary && round.status !== 'not completed') {
+          // Convert summary to HTML and sanitize
+          round.summaryHTML = DOMPurify.sanitize(marked.parse(round.summary));
+        }
+        return round;
+      });
+    }
+     
     res.render('student/space-details', {
       space,
-      layout: false
+      layout: 'layouts/d-main'
     });
+   
   } catch (err) {
     console.error('Error fetching space details:', err);
     res.status(500).send('Error fetching space details');
-  }
+  } 
 };
+
 
 exports.downloadResume = (req, res) => {
   const filePath = path.resolve(req.params.filePath); // Assuming secure paths

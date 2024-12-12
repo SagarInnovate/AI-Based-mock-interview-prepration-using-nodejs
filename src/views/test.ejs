@@ -1,415 +1,234 @@
-<div class="rbt-panel-wrapper">
-    <header class="rbt-dashboard-header rainbow-header header-default header-left-align rbt-fluid-header">
-        <div class="container-fluid position-relative">
-            <div class="row align-items-center">
-                <div class="col-lg-2 col-md-6 col-7">
-                    <div class="header-left d-flex">
-                        <div class="expand-btn-grp">
-                            <button class="bg-solid-primary popup-dashboardleft-btn" id="rightbtn"><i
-                        class="feather-sidebar left"></i></button>
-                        </div>
-                        <div class="logo">
-                            <a href="index.html">
-                                <img class="logo-light" src="assets/images/logo/logo.png" alt="Corporate Logo">
-                                <img class="logo-dark" src="assets/images/logo/logo-dark.png" alt="Corporate Logo">
-                            </a>
-                        </div>
+<style>
+    .full-height {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .main-container {
+        display: flex;
+        height: 90vh;
+        gap: 2rem; /* Space between the two columns */
+        width: 100%;
+        max-width: 1400px;
+    }
+
+    .interview-screen {
+        position: relative;
+        height: 100%;
+        padding-right: 1rem; /* For smooth scrolling experience */
+        overflow-y: auto; /* Scrollbar for the first column */
+    }
+
+    .camera-section {
+        position: relative;
+        height: 300px;
+        background-color: #f0f0f0;
+        border-radius: 15px; /* Rounded corners */
+        overflow: hidden; /* Ensure content stays inside the rounded corners */
+    }
+
+    .interviewer-thumbnail {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 80px;
+        height: 80px;
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%; /* Circle shape for thumbnail */
+        z-index: 1;
+    }
+
+    .interviewer-thumbnail.active {
+        background-color: #007bff;
+    }
+
+    .wave-animation {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        border-radius: 50%;
+        background: rgba(0, 123, 255, 0.3);
+        animation: wave 1.5s infinite ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.8);
+    }
+
+    .interviewer-thumbnail.active .wave-animation {
+        opacity: 1;
+    }
+
+    @keyframes wave {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(1.8);
+            opacity: 0;
+        }
+    }
+
+    .hb .header-round-btn {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .hb .header-round-btn.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .hb .header-round-btn .wave-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: rgba(0, 123, 255, 0.3);
+        animation: wave 1.5s infinite ease-in-out;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .hb .header-round-btn.active .wave-animation {
+        opacity: 1;
+    }
+
+    .questions-log a {
+        /* Styles for questions log buttons to differentiate them */
+        text-decoration: underline;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    .questions-log a:hover {
+        text-decoration: none;
+    }
+</style>
+
+
+
+<div class="full-height" >
+  
+
+    <div id="interview-container" class="main-container ">
+        <!-- Main Interview Section -->
+        <div class="col-12 col-md-7 bg-flashlight p-5" style="border-radius: 10px;">
+            <div class="interview-screen">
+                <!-- Question Section -->
+                <div class="question-section d-flex justify-content-between align-items-start">
+                    <h5 id="question-container" class="question-text">
+                        1. Question text will appear here, describing the task or query for the interviewee.
+                    </h5>
+                    <div class="header-buttons d-flex flex-column gap-2">
+                        <a id="stop-question-button" class="header-round-btn" title="Stop Speaking">
+                            <span><i class="feather-volume-x"></i></span>
+                        </a>
+                        <a id="replay-question-button" class="header-round-btn" title="Respeak">
+                            <span><i class="feather-refresh-ccw"></i></span>
+                        </a>
                     </div>
                 </div>
-                <div class="col-lg-10 col-md-6 col-5">
-                    <div class="header-right">
-                        <!-- Start admin Area  -->
-                        <div class="account-access rbt-user-wrapper right-align-dropdown">
-                            <div class="rbt-user ml--0">
-                                <a class="admin-img" href="code-generator.html#"><img src="assets/images/team/team-01.jpg" alt="Admin"></a>
-                            </div>
-                            <div class="rbt-user-menu-list-wrapper">
-                                <div class="inner">
-                                    <div class="rbt-admin-profile">
-                                        <div class="admin-thumbnail">
-                                            <img src="assets/images/team/team-01.jpg" alt="User Images">
-                                        </div>
-                                        <div class="admin-info">
-                                            <span class="name">Trent Adam</span>
-                                            <a class="rbt-btn-link color-primary" href="profile-details.html">View
-                                                Profile</a>
-                                        </div>
-                                    </div>
-                                    <ul class="user-list-wrapper user-nav">
-                                        <li>
-                                            <a href="profile-details.html">
-                                                <i class="feather-user"></i>
-                                                <span>Profile Details</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="notification.html">
-                                                <i class="feather-shopping-bag"></i>
-                                                <span>Change Password</span>
-                                            </a>
-                                        </li>
-                                   
-                                    </ul>
-                                    <hr class="mt--10 mb--10">
-                                  
-                                    
-                                    <ul class="user-list-wrapper">
-                                        <li>
-                                            <a href="signin.html">
-                                                <i class="feather-log-out"></i>
-                                                <span>Logout</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Start admin Area  -->
 
-                     
+                <!-- Camera Section -->
+                <div class="camera-section mt-2"> 
+                    <!-- Student Camera View -->
+                    <div class="w-100 h-100 bg-secondary" id="camera-container">
+                        <video id="video" autoplay></video>
+                    </div>
+
+                    <!-- Interviewer Thumbnail -->
+                    <div class="interviewer-thumbnail">
+                        <span>S</span>
+                        <div class="wave-animation"></div>
+                    </div>
+                </div>
+
+                <!-- Answer Section -->
+                <div class="answer-section mt-3">
+                    <div class="new-chat-form border-radius">
+                        <textarea id="jobDescription" name="jobDescription" id="answer" disabled></textarea>
+                    </div>
+
+                    <div class="header-buttons hb d-flex flex-row justify-content-center gap-4 mt-3">
+                        <a id="start-answering-btn" class="header-round-btn" title="Start Answering">
+                            <span id="mic-button"><i class="feather-volume-2"></i></span>
+                            <div class="wave-animation"></div>
+                        </a>
+                        <a id="stop-speaking-btn" class="header-round-btn" title="Stop Speaking" style="display: none;">
+                            <span id="stop-speaking-button"><i class="feather-mic-off"></i></span>
+                        </a>
+                        <a id="next-question-btn" class="header-round-btn" title="Next Question">
+                            <span id="next-button"><i class="feather-arrow-right"></i></span>
+                        </a>
+                        <a id="edit-question-btn" class="header-round-btn" title="Edit Question">
+                            <span id="edit-button"><i class="feather-edit"></i></span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
 
-
-    <!-- Start Left panel -->
-    <div class="rbt-left-panel popup-dashboardleft-section">
-        <div class="rbt-default-sidebar">
-            <div class="inner">
-                <div class="content-item-content">
-                    <div class="rbt-default-sidebar-wrapper">
-                        <nav class="mainmenu-nav">
-                            <ul class="dashboard-mainmenu rbt-default-sidebar-list">
-                                <li><a href="dashboard.html"><i class="feather-monitor"></i><span>Dashboard</span></a></li>
-                                <li class="has-submenu"><a class="collapse-btn collapsed" data-bs-toggle="collapse" href="code-generator.html#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><i
-                                    class="feather-plus-circle"></i><span>Profile</span></a>
-                                        <div class="collapse" id="collapseExample">
-                                            <ul class="submenu rbt-default-sidebar-list">
-                                                <li>
-                                                    <a href="profile-details.html">
-                                                        <i class="feather-user"></i>
-                                                        <span>Update Info</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="notification.html">
-                                                        <i class="feather-shopping-bag"></i>
-                                                        <span>Change Password</span>
-                                                    </a>
-                                                </li>
-                                               
-                                              
-                                               
-                                            </ul>
-                                        </div>
-                                    </li>
-                            </ul>
-                                                     
-                        </nav>
-
-                        <div class="rbt-sm-separator"></div>
-
-                    </div>
-                </div>
+        <!-- Questions Log Section -->
+        <div class="col-12 col-md-5 bg-flashlight p-5" style="border-radius: 10px;">
+            <h4>Interview Progress</h4>
+            <div class="questions-log">
+                <h5>Question 1</h5>
+                <p>Previous question details</p>
+                <a>View Details</a>
+                <hr>
+                <h5>Question 2</h5>
+                <p>Previous question details</p>
+                <a>View Details</a>
             </div>
-            <div class="subscription-box">
-              
-                <div id="my_switcher" class="my_switcher-3">
-                    <ul>
-                        <li>
-                            <a href="javascript: void(0);" data-theme="light" class="setColor light">
-                                <img src="assets/images/light/switch/sun-01.svg" alt="Switcher Image">
-                                <span class="text" title="Dark Mode">
-                        Dark</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" data-theme="dark" class="setColor dark">
-                                <img class="moon-light" src="assets/images/light/switch/vector.svg" alt="Switcher Image">
-                                <span class="text" title="Light Mode">Light</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <p class="subscription-copyright copyright-text text-center b4  small-text">© 2024 <a href="https://themeforest.net/user/pixcelsthemes/portfolio">Pixcels Themes</a>.</p>
-        </div>
-    </div>
-    <!-- End Left panel -->
-
-    <!-- Main content -->
-    <div class="rbt-main-content area-right-expanded">
-        <div class="rbt-daynamic-page-content">
-
-            <!-- Dashboard Center Content -->
-            <div class="rbt-dashboard-content">
-                
-                <div class="content-page">
-                    <div class="chat-box-list pt--30" id="chatContainer">
-                     
-                            <div class="d-flex justify-content-between align-items-center">
-                              <h1 class="h3">Spaces</h1>
-                              <a class="btn-default bg-solid-primary" data-bs-toggle="modal" data-bs-target="#newchatModal">
-                                <span class="icon"><i class="feather-plus-circle"></i></span>
-                                <span>New Space</span>
-                            </a>
-                            </div>
-                         
-                        
-                        <!-- Code Generator -->
-                        <div class="row row--15 service-wrapper">
-                            <% spaces.forEach((space, index) => { %>
-                              <div
-                                class="col-lg-4 col-md-6 col-sm-6 col-12 sal-animate"
-                                data-sal="slide-up"
-                                data-sal-duration="700"
-                                data-sal-delay="<%= index * 100 %>"
-                              >
-                                <div
-                                  class="service service__style--1 bg-color-blackest radius mt--25 text-center rbt-border-none variation-4 bg-flashlight"
-                                >
-                                  <!-- Icon Section -->
-                                  <div class="icon">
-                                    <i class="feather-briefcase"></i>
-                                  </div>
-                                  
-                                  <!-- Content Section -->
-                                  <div class="content">
-                                    <h4 class="title w-600">
-                                      <a href="/student/spaces/detail/<%= space._id %>">
-                                        <%= space.jobPosition %>
-                                      </a>
-                                    </h4>
-                                    <p class="description b1 color-gray mb--0">
-                                      <strong>Company:</strong> <%= space.companyName %>
-                                    </p>
-                                    <p class="description b1 color-gray mb--0">
-                                      <strong>Rounds:</strong>
-                                      <% space.interviewRounds.forEach((round, idx) => { %>
-                                        <span><%= round.name %>: <%= round.status %></span><% if (idx < space.interviewRounds.length - 1) { %>, <% } %>
-                                      <% }) %>
-                                    </p>
-                                    <% if (space.resumeSummary) { %>
-                                      <p class="description b1 color-gray mt-2">
-                                        <strong>Summary:</strong> <%= space.resumeSummary %>
-                                      </p>
-                                    <% } %>
-                                  </div>
-                                </div>
-                              </div>
-                            <% }) %>
-                          </div>
-                          
-                    </div>
-                </div>
-
-
-            </div>
-
         </div>
     </div>
 </div>
 
-<div id="newchatModal" class="modal rbt-modal-box copy-modal fade" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content wrapper top-flashlight light-xl">
-            <div class="section-title text-center mb--30 sal-animate" data-sal="slide-up" data-sal-duration="400" data-sal-delay="150">
-                <h3 class="title mb--0 w-600">Unlock the power of AI</h3>
-            </div>
-            <div class="genarator-section">
-                <ul class="genarator-card-group">
-                    <li>
-                        <a href="text-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/text.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Text Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="image-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/photo.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Image Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="image-editor.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/photo-editor.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Photo Editor</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="code-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/code-editor.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Code Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="text-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/text-voice.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Text to speech</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="text-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/voice.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Speech to text</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="vedio-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/video-camera.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Vedio Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="code-generator.html#" class="genarator-card disabled" tabindex="-1">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/website-design.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Website Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <span class="rainbow-badge-card">Coming</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="code-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/code-editor.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">HTML Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="text-generator.html" class="genarator-card disabled" tabindex="-1">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/document.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Chat with Documents</h5>
-                                </div>
-                                <div class="right-align">
-                                    <span class="rainbow-badge-card">Coming</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="email-generator.html" class="genarator-card">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/email.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Email Writer</h5>
-                                </div>
-                                <div class="right-align">
-                                    <div class="icon-bar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="code-generator.html#" class="genarator-card disabled" tabindex="-1">
-                            <div class="inner">
-                                <div class="left-align">
-                                    <div class="img-bar">
-                                        <img src="assets/images/generator-icon/lyrics.png" alt="AI Generator">
-                                    </div>
-                                    <h5 class="title">Lyrics Generator</h5>
-                                </div>
-                                <div class="right-align">
-                                    <span class="rainbow-badge-card">Coming</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <button class="close-button" data-bs-dismiss="modal">
-                <i class="feather-x"></i>
-            </button>
-        </div>
-    </div>
-</div>
+
+
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('rightbtn').click();
+    document.addEventListener("DOMContentLoaded", () => {
+        const startAnsweringBtn = document.getElementById("start-answering-btn");
+        const stopSpeakingBtn = document.getElementById("stop-speaking-btn");
+        const interviewerThumbnail = document.querySelector(".interviewer-thumbnail");
+
+
+        // Start Answering (Enable Speaking Mode)
+        startAnsweringBtn.addEventListener("click", () => {
+            startAnsweringBtn.classList.add("active");
+            interviewerThumbnail.classList.add("active");
+            stopSpeakingBtn.style.display = "inline-flex";
+            startAnsweringBtn.style.display = "none"; // Hide the mic button
+        });
+
+        // Stop Speaking (Disable Speaking Mode)
+        stopSpeakingBtn.addEventListener("click", () => {
+            startAnsweringBtn.classList.remove("active");
+            stopSpeakingBtn.style.display = "none";
+            interviewerThumbnail.classList.remove("active");
+            startAnsweringBtn.style.display = "inline-flex"; // Show the mic button again
+        });
     });
 </script>
+
+

@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Interview</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <style>
-    #loading-bar {
+<style>
+      #loading-bar {
       width: 100%;
       height: 5px;
       background-color: #ccc;
@@ -19,61 +12,323 @@
       background-color: #007bff;
       transition: width 0.3s ease;
     }
-
-    #mic-button:disabled, #stop-question-button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    #camera-container {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    #video {
-      width: 100%;
-      max-width: 500px;
-      border: 1px solid #ccc;
-    }
-
-    .button-group {
+    
+  .full-height {
+      min-height: 100vh;
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
+      align-items: center;
+      padding: 5rem;
+  }
+
+  .main-container {
+      display: flex;
+      height: 90vh;
+      gap: 2rem; /* Space between the two columns */
+      width: 100%;
+      max-width: 1400px;
+  }
+
+  .interview-screen {
+      position: relative;
+      height: 100%;
+      overflow-y: auto; /* Scrollbar for the first column */
+  }
+
+
+  .camera-section {
+  text-align: center;
+  position: relative;
+  width: 95%;
+  background-color: #f0f0f0;
+  border-radius: 15px; /* Rounded corners */
+  overflow: hidden; /* Ensure content stays inside the rounded corners */
+  padding-top: 56.25%; /* 9 / 16 = 0.5625, so 56.25% to maintain 16:9 ratio */
+  height: 0; /* Reset height to allow padding-top to control the height */
+}
+
+.camera-section video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the video covers the entire section */
+}
+
+  .interviewer-thumbnail {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: 80px;
+      height: 80px;
+      background-color: #333;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%; /* Circle shape for thumbnail */
+      z-index: 1;
+  }
+
+  .interviewer-thumbnail.active {
+      background-color: #007bff;
+  }
+
+  .wave-animation {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      border-radius: 50%;
+      background: rgba(0, 123, 255, 0.3);
+      animation: wave 1.5s infinite ease-in-out;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.8);
+  }
+
+  #camera-container {
+        text-align: center;
     }
-  </style>
-</head>
-<body>
-<div class="container mt-5">
+
+
+
+  .interviewer-thumbnail.active .wave-animation {
+      opacity: 1;
+  }
+
+  @keyframes wave {
+      0% {
+          transform: scale(1);
+          opacity: 0.5;
+      }
+      100% {
+          transform: scale(1.8);
+          opacity: 0;
+      }
+  }
+
+/* Base styles for the buttons */
+.mic-btn, .stop-btn, .next-btn, .edit-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f0f0f0; /* Default background color */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: relative; /* Ensure wave animation is contained within the button */
+}
+
+/* Disabled state for buttons */
+.mic-btn:disabled, .stop-btn:disabled, .next-btn:disabled, .edit-btn:disabled {
+  background-color: #ccc; /* Light gray for disabled background */
+  cursor: not-allowed; /* Change cursor to indicate the button is disabled */
+  box-shadow: none; /* Remove the shadow for disabled buttons */
+}
+
+/* Add hover effect */
+.mic-btn:hover, .stop-btn:hover, .next-btn:hover, .edit-btn:hover {
+  background-color: rgba(0, 123, 255, 0.8); /* Darker effect for all buttons */
+  transform: scale(1.05);
+}
+
+/* Disabled state hover effect */
+.mic-btn:disabled:hover, .stop-btn:disabled:hover, .next-btn:disabled:hover, .edit-btn:disabled:hover {
+  background-color: #ccc; /* Keep the disabled background color */
+  transform: none; /* No scaling effect for disabled buttons */
+}
+
+.mic-btn {
+  background-color: #007bff; /* Blue for mic button */
+}
+
+.stop-btn {
+  background-color: #dc3545; /* Red for stop button */
+}
+
+.next-btn {
+  background-color: #28a745; /* Green for next button */
+}
+
+.edit-btn {
+  background-color: #ffc107; /* Yellow for edit button */
+}
+
+/* Add hover effect */
+.mic-btn:hover, .stop-btn:hover, .next-btn:hover, .edit-btn:hover {
+  background-color: rgba(0, 123, 255, 0.8); /* Darker effect for all buttons */
+  transform: scale(1.05);
+}
+
+.mic-btn i, .stop-btn i, .next-btn i, .edit-btn i {
+  color: white;
+  font-size: 24px;
+}
+
+/* Wave animation specific to buttons */
+.mic-btn .wave-animation, 
+.stop-btn .wave-animation, 
+.next-btn .wave-animation, 
+.edit-btn .wave-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(0, 123, 255, 0.3);
+  animation: wave 1.5s infinite ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+/* Wave animation active when button is pressed */
+.mic-btn.active .wave-animation, 
+.stop-btn.active .wave-animation, 
+.next-btn.active .wave-animation, 
+.edit-btn.active .wave-animation {
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+
+#listening-text {
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Disable state styles for buttons */
+#mic-button:disabled, #stop-question-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+
+  .questions-log a {
+      /* Styles for questions log buttons to differentiate them */
+      text-decoration: underline;
+      color: #007bff;
+      cursor: pointer;
+  }
+
+  .questions-log a:hover {
+      text-decoration: none;
+  }
+</style>
+
+
+
+<div class="full-height" >
   <div id="loading-container" class="text-center">
-    <div id="loading-bar">
-      <div id="loading-progress"></div>
-    </div>
-    <p id="loading-message">Starting your interview...</p>
-  </div>
-
-  <div id="interview-container" class="d-none">
-    <h2 id="question-container" class="text-center">Loading question...</h2>
-
-    <div class="mt-4 text-center">
-      <textarea id="answer" class="form-control" rows="3" placeholder="Your answer will appear here..." disabled></textarea>
+      <div id="loading-bar">
+        <div id="loading-progress"></div>
+      </div>
+      <p id="loading-message">Starting your interview...</p>
     </div>
 
-    <div class="button-group">
-      <button id="stop-question-button" class="btn btn-warning" disabled>Stop Question</button>
-      <button id="replay-question-button" class="btn btn-info">Replay Question</button>
-      <button id="mic-button" class="btn btn-primary" disabled>Start Speaking</button>
-      <button id="stop-speaking-button" class="btn btn-danger" disabled>Stop Speaking</button>
-      <button id="next-button" class="btn btn-success" disabled>Next Question</button>
-      <button id="edit-button" class="btn btn-warning" style="display: none;">Edit Answer</button>
-    </div>
+  <div id="interview-container" class="main-container d-none">
+      <!-- Main Interview Section -->
+      <div class="col-12 col-md-7 bg-flashlight p-5" style="border-radius: 10px;">
+          <div class="interview-screen">
+              <!-- Question Section -->
+              <div class="question-section d-flex justify-content-between align-items-start">
+                  <h5 id="question-container" class="question-text">
+                      1. Question text will appear here, describing the task or query for the interviewee.
+                  </h5>
+                  <div class="header-buttons d-flex flex-column gap-2">
+                      <a id="stop-question-button" class="header-round-btn" title="Stop Speaking">
+                          <span><i class="feather-volume-x"></i></span>
+                      </a>
+                      <a id="replay-question-button" class="header-round-btn" title="Respeak">
+                          <span><i class="feather-refresh-ccw"></i></span>
+                      </a>
+                  </div>
+              </div>
 
-    <div id="camera-container">
-      <video id="video" autoplay></video>
-    </div>
+              <!-- Camera Section -->
+              <div class="camera-section mt-2"> 
+                  <!-- Student Camera View -->
+                  <div class="w-100 h-100 bg-secondary" id="camera-container">
+                      <video id="video" autoplay></video>
+                  </div>
+
+                  <!-- Interviewer Thumbnail -->
+                  <div class="interviewer-thumbnail">
+                      <span>S</span>
+                      <div class="wave-animation"></div>
+                  </div>
+              </div>
+
+              <!-- Answer Section -->
+              <div class="answer-section mt-3">
+                  <div class="new-chat-form border-radius">
+                      <textarea id="answer" rows="3" placeholder="Your answer will appear here..." disabled></textarea>
+                  </div>
+
+                  <div class="header-buttons hb d-flex flex-row justify-content-center gap-4 mt-3">
+                    <div>
+                      <button id="mic-button" class="mic-btn" title="Start Answering">
+                        <i class="feather-mic"></i>
+                      </button>
+                      <span id="listening-text" style="display: none; font-size: 12px; color: gray; margin-top: 5px;">Listening...</span>
+                    </div>
+                  
+                    <button id="stop-speaking-button" class="stop-btn" title="Stop Speaking">
+                      <i class="feather-mic-off"></i>
+                    </button>
+                    
+                    <button id="next-button" class="next-btn" title="Next Question">
+                      <i class="feather-arrow-right"></i>
+                    </button>
+                    
+                    <button id="edit-button" class="edit-btn" title="Edit Question">
+                      <i class="feather-edit"></i>
+                    </button>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+
+      <!-- Questions Log Section -->
+      <div class="col-12 col-md-5 bg-flashlight p-5" style="border-radius: 10px;">
+          <h4>Interview Progress</h4>
+          <div class="questions-log">
+              <h5>Question 1</h5>
+              <p>Previous question details</p>
+              <a>View Details</a>
+              <hr>
+              <h5>Question 2</h5>
+              <p>Previous question details</p>
+              <a>View Details</a>
+          </div>
+      </div>
   </div>
 </div>
+
+
+
+
 
 <script>
   // Initialize variables
@@ -133,7 +388,7 @@
 
     // Optional: Set a more natural voice (adjust as per browser)
     const voices = speechSynthesis.getVoices();
-    currentUtterance.voice = voices.find(voice => voice.name === "Google UK English Male") || voices[0];
+    // currentUtterance.voice = voices.find(voice => voice.name === "Google UK English Male") || voices[0];
 
     // Disable buttons while speaking
     micButton.disabled = true;
@@ -222,20 +477,26 @@
   }
 
   function toggleSpeechRecognition() {
-    const micButton = document.getElementById('mic-button');
-    const stopSpeakingButton = document.getElementById('stop-speaking-button');
-    const nextButton = document.getElementById('next-button');
-    
-    // Start recording
-    currentAnswer = document.getElementById('answer').value || ''; // Preserve existing text
-    recognition.start();
-    
-    micButton.disabled = true;
-    stopSpeakingButton.disabled = false;
-    micButton.textContent = 'Listening...';
-    document.getElementById('edit-button').style.display = 'none';
-    nextButton.disabled = true;
-  }
+  const micButton = document.getElementById('mic-button');
+  const stopSpeakingButton = document.getElementById('stop-speaking-button');
+  const nextButton = document.getElementById('next-button');
+  const listeningText = document.getElementById('listening-text');
+  
+  // Start recording
+  currentAnswer = document.getElementById('answer').value || ''; // Preserve existing text
+  recognition.start();
+  
+  micButton.disabled = true;
+  stopSpeakingButton.disabled = false;
+  micButton.innerHTML = `<span ><i class="feather-mic"></i></span>
+                          <div class="wave-animation"></div>` ;  // Keep button text as 'Start'
+  document.getElementById('edit-button').style.display = 'none';
+  nextButton.disabled = true;
+  
+  // Show listening text below the button
+  listeningText.style.display = 'block';  // Display the "Listening..." text
+}
+
 
   function stopSpeaking() {
     const micButton = document.getElementById('mic-button');
@@ -246,11 +507,15 @@
       recognition.stop(); // Stop recording
     }
 
-    micButton.textContent = 'Start Speaking';
+    micButton.innerHTML = `<span ><i class="feather-mic"></i></span>
+                          <div class="wave-animation"></div>`;
+
     micButton.disabled = false;
     stopSpeakingButton.disabled = true;
     document.getElementById('answer').disabled = false;
     document.getElementById('edit-button').style.display = 'inline-block';
+    const listeningText = document.getElementById('listening-text');
+    listeningText.style.display = 'none';
     nextButton.disabled = false;
   }
 
@@ -330,5 +595,3 @@
     document.getElementById('edit-button').addEventListener('click', enableEditing);
   });
 </script>
-</body>
-</html>

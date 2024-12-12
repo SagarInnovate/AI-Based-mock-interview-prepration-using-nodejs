@@ -85,14 +85,14 @@ router.get('/space', protect, (req, res) => {
 });
 
 router.post('/spaces/create', [protect, upload.single('resume')], spaceController.createSpace);
-router.get('/space/:id', protect,spaceController.getSpaceDetails);
+router.get('/space/:id',spaceController.getSpaceDetails);
 
 // router.post('/spaces/start-round/:spaceId/:roundName', protect, spaceController.startRound);
 router.get('/space/:spaceId/round/:roundName/start', (req, res) => {
   const { spaceId, roundName } = req.params;
 
   // Pass these variables to the view
-  res.render('student/interview-screen', { layout:false, spaceId, roundName });
+  res.render('student/interview-screen', { layout:'layouts/d-main', spaceId, roundName });
 });
 
 // Route to start an interview round and generate questions
