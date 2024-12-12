@@ -27,5 +27,13 @@ const home = async (req, res) => {
       }
   };
   
-  module.exports = { home, about, contact};
+  const test = async (req, res) => {
+    try {
+      res.render('test', { title: 'test' , layout:'layouts/d-main' });
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+  };
+  
+  module.exports = { home, about, contact,test};
   

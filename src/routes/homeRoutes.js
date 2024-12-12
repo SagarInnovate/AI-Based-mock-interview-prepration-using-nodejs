@@ -4,6 +4,7 @@ const studentController = require('../controllers/studentController');
 const authController = require('../controllers/authController');
 const multer = require('multer');
 const spaceController = require('../controllers/spaceController');
+const interviewController = require('../controllers/InterviewController');
 const path = require('path');
 const router = express.Router();
 const fs = require('fs');
@@ -68,6 +69,7 @@ router.get('/logout', (req, res) => {
 
 // Protected student routes
 router.get('/dashboard', protect, spaceController.getSpaces);
+
 router.get('/profile', protect, studentController.getProfile);
 router.post('/update-profile', protect, studentController.updateProfile);
 router.get('/change-password', protect, studentController.changePasswordView);
@@ -77,7 +79,30 @@ router.post('/change-password', protect, studentController.changePassword);
 router.get('/spaces', protect, (req, res) => {
   res.redirect('/dashboard'); // Redirect to dashboard
 });
+
+router.get('/space', protect, (req, res) => {
+  res.redirect('/dashboard'); // Redirect to dashboard
+});
+
 router.post('/spaces/create', [protect, upload.single('resume')], spaceController.createSpace);
-router.post('/spaces/start-round/:spaceId/:roundName', protect, spaceController.startRound);
+router.get('/space/:id', protect,spaceController.getSpaceDetails);
+
+// router.post('/spaces/start-round/:spaceId/:roundName', protect, spaceController.startRound);
+router.get('/space/:spaceId/round/:roundName/start', (req, res) => {
+  const { spaceId, roundName } = req.params;
+
+  // Pass these variables to the view
+  res.render('student/interview-screen', { layout:false, spaceId, roundName });
+});
+
+// Route to start an interview round and generate questions
+router.get('/generate-questions/:spaceId/:roundName', interviewController.startRound);
+
+// Route to finish an interview round and save answers with summary
+router.post('/finish-round/:spaceId/:roundName', interviewController.finishRound);
+
+
+
+router.get('/test', houseController.test);
 
 module.exports = router;

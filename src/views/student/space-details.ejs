@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Details - Markdown Rendering</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <style>
+    .summary-content {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="space-details">
+    <h1>Company: <%= space.companyName %></h1>
+    <h2>Position: <%= space.jobPosition %></h2>
+    
+    <div>
+      <strong>Description:</strong>
+      <div id="jobDescription"></div>
+    </div>
+  
+    <div>
+      <h3>Your Resume:</h3>
+      <% if (space.resumePath) { %>
+        <a href="/Resumes/<%= space.resumePath %>">Download Resume</a>
+      <% } else { %>
+        <p>No resume uploaded</p>
+      <% } %>
+    </div>
+  
+    <div>
+      <h3>Summary of Resume:</h3>
+      <div id="resumeSummary"></div>
+    </div>
+  
+    <div>
+      <h3>Interview Rounds:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Round Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% space.interviewRounds.forEach(round => { %>
+            <tr>
+              <td><%= round.name %></td>
+              <td><%= round.status %></td>
+              <td>
+                <% if (round.status === 'not completed') { %>
+                  <a href="/space/<%= space._id %>/round/<%= round.name %>/start">Start</a>
+                <% } else { %>
+                  <div id="roundSummary-<%= round.name %>" class="summary-content"></div>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Escape function to handle special characters
+      function escapeHtml(unsafe) {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // Render Job Description
+      function renderMarkdown(rawText) {
+        try {
+          // Escape HTML first to prevent XSS
+          const escapedText = escapeHtml(rawText);
+          
+          // Use marked to convert to HTML
+          const htmlContent = marked.parse(escapedText);
+          
+          // Sanitize the generated HTML
+          return DOMPurify.sanitize(htmlContent);
+        } catch (error) {
+          console.error('Markdown rendering error:', error);
+          return `<p>Error rendering markdown: ${escapeHtml(error.message)}</p>`;
+        }
+      }
+
+      // Job Description
+      const jobDescription = '<%= space.jobDescription %>';
+      if (jobDescription) {
+        document.getElementById('jobDescription').innerHTML = renderMarkdown(jobDescription);
+      }
+
+      // Resume Summary
+      const resumeSummary = '<%= space.purifiedSummary %>';
+      if (resumeSummary) {
+        document.getElementById('resumeSummary').innerHTML = renderMarkdown(resumeSummary);
+      }
+
+      // Interview Round Summaries
+      <% space.interviewRounds.forEach(round => { 
+        if (round.status !== 'not completed' && round.summary) { %>
+        const roundSummary = `<%= round.summary.replace(/`/g, '\\`') %>`;
+        if (roundSummary) {
+          const summaryElement = document.getElementById('roundSummary-<%= round.name %>');
+          if (summaryElement) {
+            summaryElement.innerHTML = renderMarkdown(roundSummary);
+          }
+        }
+      <% } }); %>
+    });
+  </script>
+</body>
+</html>

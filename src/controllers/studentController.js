@@ -1,11 +1,7 @@
 const Student = require('../models/studentModel');
 const bcrypt = require('bcryptjs');
 
-const dashboard = (req, res) => {
-  res.render('student/dashboard', {
-    name: req.session.name,  // Pass 'name' from session to the view
-  });
-};
+
 
 
 const getProfile = async (req, res) => {
@@ -121,4 +117,4 @@ const changePassword = async (req, res) => {
 
 
 
-module.exports = { getProfile, changePasswordView, changePassword, dashboard ,updateProfile};
+module.exports = { getProfile, changePasswordView, changePassword ,updateProfile};

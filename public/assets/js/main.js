@@ -243,14 +243,14 @@
       popuprightdashboard: function (e) {
         function updateSidebar() {
           if ($(window).width() >= 1200) {
-            $(".popup-dashboardright-btn").removeClass("collapsed");
-            $(".popup-dashboardright-section").removeClass("collapsed");
-            $(".rbt-main-content").removeClass("area-right-expanded");
-            $(".rbt-static-bar").removeClass("area-right-expanded");
+            // $(".popup-dashboardright-btn").removeClass("collapsed");
+            // $(".popup-dashboardright-section").removeClass("collapsed");
+            // $(".rbt-main-content").removeClass("area-right-expanded");
+            // $(".rbt-static-bar").removeClass("area-right-expanded");
           } else {
-            $(".popup-dashboardright-section").addClass("collapsed");
-            $(".rbt-main-content").addClass("area-right-expanded");
-            $(".rbt-static-bar").addClass("area-right-expanded");
+            // $(".popup-dashboardright-section").addClass("collapsed");
+            // $(".rbt-main-content").addClass("area-right-expanded");
+            // $(".rbt-static-bar").addClass("area-right-expanded");
           }
         }
         // Hide sidebars by default
@@ -273,10 +273,10 @@
 
         // Toggle classes on button click
         $(".popup-dashboardright-btn").on("click", function (e) {
-          $(".popup-dashboardright-btn").toggleClass("collapsed");
-          $(".popup-dashboardright-section").toggleClass("collapsed");
-          $(".rbt-main-content").toggleClass("area-right-expanded");
-          $(".rbt-static-bar").toggleClass("area-right-expanded");
+          // $(".popup-dashboardright-btn").toggleClass("collapsed");
+          // $(".popup-dashboardright-section").toggleClass("collapsed");
+          // $(".rbt-main-content").toggleClass("area-right-expanded");
+          // $(".rbt-static-bar").toggleClass("area-right-expanded");
         });
       },
 

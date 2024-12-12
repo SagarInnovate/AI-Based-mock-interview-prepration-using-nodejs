@@ -62,10 +62,12 @@ exports.createSpace = async (req, res) => {
     const { companyName, jobPosition, interviewRounds, jobDescription } = req.body;
     const rounds = Array.isArray(interviewRounds) ? interviewRounds : [];
     const resumePath = req.file ? req.file.path : '';
-
+    const fileName= req.file ? req.file.filename : '';
+    
+console.log(req.file);
     // Validate input fields
     if (!companyName || !jobPosition || rounds.length === 0 || !resumePath) {
-      return res.redirect(`/student/dashboard?error=${encodeURIComponent('Company name, job position, interview rounds, and resume are required.')}`);
+      return res.redirect(`/dashboard?error=${encodeURIComponent('Company name, job position, interview rounds, and resume are required.')}`);
     }
 
     // Extract text from resume
@@ -75,7 +77,7 @@ exports.createSpace = async (req, res) => {
     } else if (resumePath.endsWith('.docx')) {
       resumeText = await extractTextFromDOCX(resumePath);
     } else {
-      return res.redirect(`/student/dashboard?error=${encodeURIComponent('Only PDF and DOCX file types are supported.')}`);
+      return res.redirect(`/dashboard?error=${encodeURIComponent('Only PDF and DOCX file types are supported.')}`);
     }
 
     // Check if job description is valid
@@ -91,7 +93,7 @@ exports.createSpace = async (req, res) => {
       jobPosition,
       interviewRounds: rounds.map((round) => ({ name: round })),
       jobDescription: isJobDescriptionValid ? jobDescription : 'N/A', // Save only valid descriptions
-      resumePath,
+      resumePath: fileName,
       resumeText, // Store the full extracted text
       purifiedSummary, // Store the purified summary
     });
@@ -100,44 +102,77 @@ exports.createSpace = async (req, res) => {
     await newSpace.save();
 
     // Redirect to dashboard on success
-    res.redirect('/student/dashboard');
+    res.redirect('/dashboard');
   } catch (err) {
     console.error('Error creating space:', err);
-    res.redirect(`/student/dashboard?error=${encodeURIComponent('Error creating space. Please try again.')}`);
+    res.redirect(`/dashboard?error=${encodeURIComponent('Error creating space. Please try again.')}`);
   }
 };
 
 
 
-  
+
 // Fetch all spaces for a student
 exports.getSpaces = async (req, res) => {
   try {
     const spaces = await Space.find({ studentId: req.session.studentId });
-    res.render('student/dashboard', { spaces });
+    res.render('student/dashboard', { spaces, layout: 'layouts/d-main' });
   } catch (err) {
     console.error('Error fetching spaces:', err);
     res.status(500).send('Error fetching spaces');
   }
 };
 
-// Start an interview round
-exports.startRound = async (req, res) => {
+exports.getSpaceDetails = async (req, res) => {
   try {
-    const { spaceId, roundName } = req.params;
-    const space = await Space.findById(spaceId);
-    const round = space.interviewRounds.find(r => r.name === roundName);
+    const { id } = req.params; // Extract space ID from the route
+    const space = await Space.findById(id);
 
-    if (round) {
-      round.status = 'completed';
-      round.summary = 'Sample summary for this round. Add real summary logic here.'; // Placeholder for summary
-      await space.save();
-      res.redirect('/student/dashboard'); // Redirect to dashboard after updating
-    } else {
-      res.status(404).send('Interview round not found');
+    if (!space) {
+      return res.redirect(`/dashboard?error=${encodeURIComponent('Space not found.')}`);
     }
+
+    res.render('student/space-details', {
+      space,
+      layout: false
+    });
   } catch (err) {
-    console.error('Error starting round:', err);
-    res.status(500).send('Error starting round');
+    console.error('Error fetching space details:', err);
+    res.status(500).send('Error fetching space details');
   }
 };
+
+exports.downloadResume = (req, res) => {
+  const filePath = path.resolve(req.params.filePath); // Assuming secure paths
+  res.download(filePath, (err) => {
+    if (err) {
+      console.error('Error downloading file:', err);
+      res.status(500).send('Error downloading file');
+    }
+  });
+};
+
+
+exports.startInterviewRound = async (req, res) => {
+  try {
+    const { id, roundName } = req.params;
+    const space = await Space.findById(id);
+
+    const round = space.interviewRounds.find(r => r.name === roundName);
+    if (!round) {
+      return res.status(404).send('Round not found');
+    }
+
+    round.status = 'completed';
+    round.summary = 'Summary generated after interview'; // Replace with actual logic
+    await space.save();
+
+    res.redirect(`/space/${id}`);
+  } catch (err) {
+    console.error('Error starting interview round:', err);
+    res.status(500).send('Error starting interview round');
+  }
+};
+
+
+
