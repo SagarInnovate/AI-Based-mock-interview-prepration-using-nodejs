@@ -7,7 +7,7 @@ const studentSchema = new mongoose.Schema({
     password: { type: String, required: true },
     jobPositions: { type: [String], default: [] },
     profilePhoto: { type: String, default: null },
-  
+    geminiApiKey: { type: String, default: null },  // New field for storing API key
 });
 
 // Pre-save hook to hash the password

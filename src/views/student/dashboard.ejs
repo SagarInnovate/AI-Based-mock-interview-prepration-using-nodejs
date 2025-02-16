@@ -1,6 +1,12 @@
 
+<% if (error) { %>
+    <div class="alert alert-danger text-center mt-3">
+        <%= error %>
+    </div>
+<% } %>
 
 <div class="rbt-panel-wrapper">
+
     <header class="rbt-dashboard-header rainbow-header header-default header-left-align rbt-fluid-header">
         <div class="container-fluid position-relative">
             <div class="row align-items-center">
@@ -67,8 +73,7 @@
                             </div>
                         </div> -->
                         <!-- Start admin Area  -->
-
-                     
+     
                     </div>
                 </div>
             </div>

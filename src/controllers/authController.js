@@ -89,7 +89,6 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate email and password
     if (!email || !password) {
       return res.status(400).render('student/auth/login', { 
         title: 'Login', 
@@ -97,18 +96,15 @@ const login = async (req, res) => {
       });
     }
 
-    // Find the student by email
     const student = await Student.findOne({ email });
 
     if (student && (await student.matchPassword(password))) {
-      // Save the user's information in the session
       req.session.studentId = student._id;
       req.session.name = student.name;
+      req.session.geminiApiKey = student.geminiApiKey || null;  // Store API key in session
 
-      // Redirect to the dashboard after successful login
       return res.redirect('/dashboard');
     } else {
-      // Render login page with error if email or password is invalid
       return res.status(401).render('student/auth/login', { 
         title: 'Login', 
         error: 'Invalid email or password.' 

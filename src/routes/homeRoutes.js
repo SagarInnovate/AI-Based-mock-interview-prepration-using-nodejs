@@ -8,6 +8,7 @@ const interviewController = require('../controllers/InterviewController');
 const path = require('path');
 const router = express.Router();
 const fs = require('fs');
+const Student = require('../models/studentModel');
 
 // Protect middleware
 const protect = (req, res, next) => {
@@ -101,6 +102,44 @@ router.get('/generate-questions/:spaceId/:roundName', interviewController.startR
 // Route to finish an interview round and save answers with summary
 router.post('/finish-round/:spaceId/:roundName', interviewController.finishRound);
 
+router.get('/get-api-key', async (req, res) => {
+  try {
+      if (!req.session.studentId) {
+          return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const student = await Student.findById(req.session.studentId);
+      if (!student) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json({ geminiApiKey: student.geminiApiKey });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/save-api-key', async (req, res) => {
+  try {
+      if (!req.session.studentId) {
+          return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const { apiKey } = req.body;
+      if (!apiKey) {
+          return res.status(400).json({ error: 'API key is required.' });
+      }
+
+      await Student.findByIdAndUpdate(req.session.studentId, { geminiApiKey: apiKey });
+
+      req.session.geminiApiKey = apiKey;  // Update session
+      res.json({ success: true });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error:'});
+  }
+});
 
 
 router.get('/test', houseController.test);

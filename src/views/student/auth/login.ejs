@@ -7,6 +7,14 @@
     </div>
 <% } %>
 
+<style>
+    .custom-swal-popup {
+    width: 500px !important; /* Increase width */
+    height: auto !important; /* Adjust height dynamically */
+    padding: 30px !important; /* Increase padding for better spacing */
+}
+
+</style>
 
       <!-- Start Sign up Area  -->
       <div class="signup-area rainbow-section-gapTop-big"  data-black-overlay="2">
@@ -30,8 +38,8 @@
                                 <div class="icon"><i class="feather-lock"></i></div>
                                 <input type="password" name="password" placeholder="Password">
                             </div>
-                            <div class="forget-text"><a class="btn-read-more" href="/forgot-password"><span>Forgot
-                                        password</span></a></div>
+                            <!-- <div class="forget-text"><a class="btn-read-more" href="/forgot-password"><span>Forgot
+                                        password</span></a></div> -->
                             <button type="submit" class="btn-default">Sign In</button>
                         </form>
                     </div>
@@ -45,5 +53,33 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const successMessage = "<%- typeof success !== 'undefined' ? success : '' %>";
+            const errorMessage = "<%- typeof error !== 'undefined' ? error : '' %>";
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: errorMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+
     <!-- End Sign up Area  -->
 

@@ -12,6 +12,7 @@
     "@google/generative-ai": "^0.21.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
+    "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
     "dompurify": "^3.2.3",
     "dotenv": "^16.4.7",

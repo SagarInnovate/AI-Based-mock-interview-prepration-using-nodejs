@@ -24,6 +24,9 @@
 
         <link rel="stylesheet" href="/assets/css/plugins/prism.css">
         <link rel="stylesheet" href="/assets/css/style.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     </head>
 
     <body>
@@ -42,6 +45,43 @@
     ============================================ -->
         <!-- JS
 ============================================ -->
+
+
+    
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const successMessage = "<%- typeof success !== 'undefined' ? success : '' %>";
+                const errorMessage = "<%- typeof error !== 'undefined' ? error : '' %>";
+        
+                if (successMessage) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: successMessage,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            popup: 'custom-swal-popup'
+                        }
+                    });
+                }
+        
+                if (errorMessage) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: errorMessage,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            popup: 'custom-swal-popup'
+                        }
+                    });
+                }
+            });
+        </script>
+
         <script src="/assets/js/vendor/modernizr.min.js"></script>
         <script src="/assets/js/vendor/jquery.min.js"></script>
         <script src="/assets/js/vendor/bootstrap.min.js"></script>

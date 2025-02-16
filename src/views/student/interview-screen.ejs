@@ -237,6 +237,57 @@
 </style>
 
 
+<!-- Loading Bar (Top) -->
+<div id="loadingBar" style="
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 0%; 
+    height: 5px; 
+    background: #4CAF50; 
+    transition: width 0.5s ease-in-out;">
+</div>
+
+<!-- Full-Screen Loading Overlay (Hidden by Default) -->
+<div id="loadingOverlay" style="
+    display: none !important; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.7); 
+    z-index: 9999; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    flex-direction: column;
+">
+    <p>Submitting your interview...</p>
+    <div class="spinner"></div>
+</div>
+
+<!-- Spinner Styling -->
+<style>
+    .spinner {
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-top: 5px solid white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
 
 <div class="full-height" >
   <div id="loading-container" class="text-center">
@@ -246,12 +297,13 @@
       <p id="loading-message">Starting your interview...</p>
     </div>
 
+
   <div id="interview-container" class="main-container d-none">
       <!-- Main Interview Section -->
       <div class="col-12 col-md-7 bg-flashlight p-5" style="border-radius: 10px;">
           <div class="interview-screen">
               <!-- Question Section -->
-              <div class="question-section d-flex justify-content-between align-items-start">
+              <div class="question-section d-flex justify-content-between align-items-center">
                   <h5 id="question-container" class="question-text">
                       1. Question text will appear here, describing the task or query for the interviewee.
                   </h5>
@@ -281,10 +333,7 @@
 
               <!-- Answer Section -->
               <div class="answer-section mt-3">
-                  <div class="new-chat-form border-radius">
-                      <textarea id="answer" rows="3" placeholder="Your answer will appear here..." disabled></textarea>
-                  </div>
-
+                 
                   <div class="header-buttons hb d-flex flex-row justify-content-center gap-4 mt-3">
                     <div>
                       <button id="mic-button" class="mic-btn" title="Start Answering">
@@ -310,18 +359,13 @@
           </div>
       </div>
 
-      <!-- Questions Log Section -->
+    
       <div class="col-12 col-md-5 bg-flashlight p-5" style="border-radius: 10px;">
           <h4>Interview Progress</h4>
-          <div class="questions-log">
-              <h5>Question 1</h5>
-              <p>Previous question details</p>
-              <a>View Details</a>
-              <hr>
-              <h5>Question 2</h5>
-              <p>Previous question details</p>
-              <a>View Details</a>
-          </div>
+          <div class="new-chat-form border-radius">
+            <textarea id="answer" rows="15" placeholder="Your answer will appear here..." disabled></textarea>
+        </div>
+
       </div>
   </div>
 </div>
@@ -548,25 +592,54 @@
     document.getElementById('next-button').disabled = false; // Allow to move to next question
   }
 
-  // Save all answers to the server and finalize the interview
   async function finishInterview() {
     try {
-      const response = await fetch(`/finish-round/${spaceId}/${roundName}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers }),
-      });
+        // Show the loading bar and overlay only when submitting
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        loadingBar.style.display = 'block';
+        loadingOverlay.style.display = 'flex'; // Show overlay
+        document.body.style.pointerEvents = 'none'; // Disable all clicks
 
-      if (response.ok) {
-        alert('Interview completed successfully!');
-        window.location.href = '/dashboard'; // Redirect to the dashboard
-      } else {
-        alert('Error finishing interview. Please try again.');
-      }
+        loadingBar.style.width = '10%'; // Start animation
+
+        // Simulate progress effect
+        let progress = 10;
+        const interval = setInterval(() => {
+            if (progress < 90) { // Stop at 90% until response is received
+                progress += 10;
+                loadingBar.style.width = progress + '%';
+            }
+        }, 500);
+
+        // Send the request
+        const response = await fetch(`/finish-round/${spaceId}/${roundName}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers }),
+        });
+
+        clearInterval(interval); // Stop progress animation
+
+        if (response.ok) {
+            loadingBar.style.width = '100%'; // Complete progress
+            setTimeout(() => {
+                window.location.href = '/dashboard'; // Redirect after delay
+            }, 500);
+        } else {
+            alert('Error finishing interview. Please try again.');
+            loadingBar.style.display = 'none'; // Hide loading bar on error
+            loadingOverlay.style.display = 'none'; // Hide overlay on error
+            document.body.style.pointerEvents = 'auto'; // Re-enable clicks
+        }
     } catch (err) {
-      console.error('Error finishing interview:', err);
+        console.error('Error finishing interview:', err);
+        alert('Error finishing interview. Please try again.');
+        document.getElementById('loadingBar').style.display = 'none'; // Hide loading bar
+        document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay
+        document.body.style.pointerEvents = 'auto'; // Re-enable clicks
     }
-  }
+}
 
   // Initialize camera stream
   async function initializeCamera() {

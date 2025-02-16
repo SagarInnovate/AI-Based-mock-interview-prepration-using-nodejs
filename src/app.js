@@ -3,6 +3,8 @@ const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 require('dotenv').config(); // Load environment variables
+const flash = require('connect-flash');
+
 
 // Import routes
 const homeRoutes = require('./routes/homeRoutes'); 
@@ -22,6 +24,16 @@ app.use(
     },
   })
 );
+
+app.use(flash());
+
+// Middleware to pass flash messages to templates
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+
 
 // Middleware to parse JSON and form data
 app.use(express.json());
