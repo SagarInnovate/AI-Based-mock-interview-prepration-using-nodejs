@@ -7,8 +7,10 @@ The **AI-Based Mock Interview Preparation System** is a state-of-the-art platfor
 - 🔐 **User Authentication**
   - Secure signup and login system.
   - User credentials are emailed via **Gmail SMTP**.
+
 - 🎛️ **Interactive Dashboard**
   - Provides an intuitive interface for managing interview preparations.
+
 - 🏢 **Space Management (Company-wise Interviews)**
   - Users create a "Space" for each company they are preparing for.
   - Each space contains:
@@ -17,23 +19,30 @@ The **AI-Based Mock Interview Preparation System** is a state-of-the-art platfor
     - 📌 **Job Position**
     - 🎯 **Interview Rounds** (Technical, HR, Aptitude, etc.)
     - 📂 **Resume Upload & AI Summarization**
+
 - 🤖 **AI-Powered Resume Summarization**
   - Extracts text from uploaded PDFs/DOCs and summarizes key details.
+
 - 🎙️ **AI-Generated Realistic Interview Questions**
   - Based on resume, job description, and interview round type.
   - Mimics real-world industry interview scenarios.
+
 - 🗣️ **AI Speech Integration**
   - AI reads out questions to simulate real interview experience.
+
 - 🎤 **Voice-Based Answering System**
   - Users respond via voice input.
   - Option to edit responses before submission.
+
 - 📊 **Post-Interview AI-Generated Summary & Feedback**
   - 📄 **Interview Summary**
   - 🏆 **Key Takeaways**
   - 📈 **Evaluation Metrics**
   - 💡 **Best Practices for Improvement**
+
 - 🎨 **Modern & Attractive UI**
   - User-friendly interface with seamless navigation.
+  
 - 🌍 **Open-Source**
   - Fully open-source with scope for community contributions.
 
