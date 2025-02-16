@@ -42,7 +42,7 @@ The **AI-Based Mock Interview Preparation System** is a state-of-the-art platfor
 
 - 🎨 **Modern & Attractive UI**
   - User-friendly interface with seamless navigation.
-  
+
 - 🌍 **Open-Source**
   - Fully open-source with scope for community contributions.
 
@@ -98,8 +98,8 @@ The **AI-Based Mock Interview Preparation System** is a state-of-the-art platfor
 ### 🚀 Setup Instructions
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/SagarInnovate/AI-Based-mock-interview-prepration-using-nodejs.git
+   cd AI-Based-mock-interview-prepration-using-nodejs
    ```
 2. Install dependencies:
    ```sh
