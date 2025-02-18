@@ -20,3 +20,20 @@ build/
 # IDE settings
 .idea/
 .vscode/
+
+*.zip
+*.tar.gz
+*.tar.xz
+*.tar
+*.tgz
+*.rar
+*.gz
+*.xz
+*.7z
+*.exe
+*.msi
+*.apk
+*.dmg
+*.iso
+*.img
+*.jar
