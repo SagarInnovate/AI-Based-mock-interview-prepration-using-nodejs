@@ -59,14 +59,10 @@ router.get('/login', redirectIfAuthenticated, authController.loginView);
 router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPasswordForm);
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error destroying session:', err);
-      return res.status(500).send('Unable to logout');
-    }
-    res.redirect('/login'); // Redirect to login after logout
-  });
+  req.session = null; // Clear the session
+  res.redirect('/login'); // Redirect to login page
 });
+
 
 // Protected student routes
 router.get('/dashboard', protect, spaceController.getSpaces);
