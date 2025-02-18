@@ -35,12 +35,12 @@ if (!fs.existsSync(resumeFolderPath)) {
 // Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(`Storing file in: ${resumeFolderPath}`);
+    // console.log(`Storing file in: ${resumeFolderPath}`);
     cb(null, resumeFolderPath); // Set the destination to the 'Resumes' folder
   },
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + '-' + file.originalname;
-    console.log(`Saving file as: ${uniqueName}`);
+    // console.log(`Saving file as: ${uniqueName}`);
     cb(null, uniqueName);
   },
 });

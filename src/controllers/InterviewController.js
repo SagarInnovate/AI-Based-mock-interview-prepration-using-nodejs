@@ -48,7 +48,7 @@ exports.startRound = async (req, res) => {
                 .split('\n')
                 .filter(q => /^\d+\.\s/.test(q.trim())); 
 
-            console.log(questions);
+            // console.log(questions);
             res.json({ questions });
         } catch (err) {
             console.error('Error generating questions:', err);
