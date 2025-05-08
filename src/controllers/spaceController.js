@@ -1,4 +1,5 @@
 const Space = require('../models/spaceModel');
+const Session = require('../models/sessionModel');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const path = require('path');
 const fs = require('fs');
@@ -7,6 +8,9 @@ const mammoth = require('mammoth');
 const marked = require('marked'); 
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom'); 
+
+// Global API key
+const API_KEY = process.env.GEMINI_API_KEY;
 
 // Function to extract text from PDF
 const extractTextFromPDF = async (filePath) => {
@@ -22,9 +26,10 @@ const extractTextFromDOCX = async (filePath) => {
 };
 
 // Function to generate a purified summary using Gemini AI
-const purifyContent = async (resumeText, jobDescription, apiKey) => {
+const purifyContent = async (resumeText, jobDescription) => {
   let prompt;
   if (jobDescription && jobDescription.trim().length > 20) {
+    console.log("running inside description");
       prompt = `
       I have the following resume text:
       "${resumeText}"
@@ -35,6 +40,7 @@ const purifyContent = async (resumeText, jobDescription, apiKey) => {
       Summarize the most relevant skills, experiences, and qualifications from the resume that match the job description. Only include essential and actionable points. Avoid ambiguity.
       `;
   } else {
+    console.log("running inside without description");
       prompt = `
       I have the following resume text:
       "${resumeText}"
@@ -44,63 +50,50 @@ const purifyContent = async (resumeText, jobDescription, apiKey) => {
   }
 
   try {
-      if (!apiKey) throw new Error('API key is missing.');
-
-      const genAI = new GoogleGenerativeAI(apiKey);
+      const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       
       const result = await model.generateContent(prompt);
       return result.response.text(); 
   } catch (error) {
       console.error('Error summarizing content:', error);
-
-      // Check if the error is due to an invalid API key
-      if (error.message.includes('403') || error.message.includes('invalid') || error.message.includes('API key')) {
-        req.flash('error', 'Invalid API key. Please create a new account with a correct API key.');
-        res.redirect('/dashboard');
-      }
-
-    
-
       return 'Error generating summary'; 
   }
 };
 
-
 // Create a new interview space
 exports.createSpace = async (req, res) => {
-    try {
-        const { companyName, jobPosition, interviewRounds, jobDescription } = req.body;
-        const rounds = Array.isArray(interviewRounds) ? interviewRounds : [];
-        const resumePath = req.file ? req.file.path : '';
-        const fileName = req.file ? req.file.filename : '';
-
-        const apiKey = req.session.geminiApiKey;
-        if (!apiKey) {
-          req.flash('error', 'No API key found. Please set your Gemini API key.');
-          return res.redirect('/dashboard');
-      }
+  console.log('Creating space...');
+  console.log('Request body:', req.body);
+  try {
+    const { companyName, jobPosition, interviewRounds, jobDescription } = req.body;
+    
+    // Fix for single round selection - ensure it's always an array
+    const rounds = Array.isArray(interviewRounds) 
+      ? interviewRounds 
+      : interviewRounds ? [interviewRounds] : [];
       
-      if (!companyName || !jobPosition || rounds.length === 0 || !resumePath) {
-          req.flash('error', 'Company name, job position, interview rounds, and resume are required.');
-          return res.redirect('/dashboard');
-      }
+    const resumePath = req.file ? req.file.path : '';
+    const fileName = req.file ? req.file.filename : '';
+  
+    if (!companyName || !jobPosition || rounds.length === 0 || !resumePath) {
+      return res.status(400).send('Company name, job position, interview rounds, and resume are required.');
+    }
       
-      let resumeText = '';
-      if (resumePath.endsWith('.pdf')) {
-          resumeText = await extractTextFromPDF(resumePath);
-      } else if (resumePath.endsWith('.docx')) {
-          resumeText = await extractTextFromDOCX(resumePath);
-      } else {
-          req.flash('error', 'Only PDF and DOCX file types are supported.');
-          return res.redirect('/dashboard');
-      }
+        let resumeText = '';
+        if (resumePath.endsWith('.pdf')) {
+            resumeText = await extractTextFromPDF(resumePath);
+        } else if (resumePath.endsWith('.docx')) {
+            resumeText = await extractTextFromDOCX(resumePath);
+        } else {
+            return res.status(400).send('Only PDF and DOCX file types are supported.');
+        }
       
         const isJobDescriptionValid = jobDescription && jobDescription.trim().length > 20;
-        const purifiedSummary = await purifyContent(resumeText, isJobDescriptionValid ? jobDescription : '', apiKey);
+        const purifiedSummary = await purifyContent(resumeText, isJobDescriptionValid ? jobDescription : '');
 
         const newSpace = new Space({
-            studentId: req.session.studentId,
+            studentId: req.session.uniqueId, // Use uniqueId instead of studentId
             companyName,
             jobPosition,
             interviewRounds: rounds.map((round) => ({ name: round })),
@@ -111,36 +104,39 @@ exports.createSpace = async (req, res) => {
         });
 
         await newSpace.save();
-        req.flash('success', 'Space created successfully!');
+        
+        // Update session's spaces array
+        await Session.findOneAndUpdate(
+            { uniqueId: req.session.uniqueId },
+            { $push: { spaces: newSpace._id } }
+        );
+        
         res.redirect('/dashboard');
     } catch (err) {
         console.error('Error creating space:', err);
-        req.flash('error', 'Error creating space. Please try again.');
-        res.redirect('/dashboard');
+        res.status(500).send('Error creating space. Please try again.');
     }
 };
 
-
-// Fetch all spaces for a student
+// Fetch all spaces for a session
 exports.getSpaces = async (req, res) => {
-  try {
-    const spaces = await Space.find({ studentId: req.session.studentId });
+    try {
+      const spaces = await Space.find({ studentId: req.session.uniqueId });
+      const session = await Session.findOne({ uniqueId: req.session.uniqueId });
+  
+      res.render('student/dashboard', { 
+        spaces, 
+        session,
+        name: session ? session.name : 'User',
+        uniqueId: req.session.uniqueId // Added uniqueId here
+      });
+    } catch (err) {
+      console.error('Error fetching spaces:', err);
+      res.status(500).send('Error fetching spaces. Please try again.');
+    }
+  };
 
-    res.render('student/dashboard', { 
-      spaces, 
-      layout: 'layouts/d-main', 
-      success: req.flash('success'), 
-      error: req.flash('error') 
-    });
-  } catch (err) {
-    console.error('Error fetching spaces:', err);
-    req.flash('error', 'Error fetching spaces. Please try again.');
-    res.redirect('/dashboard'); // Redirect with flash error message
-  }
-};
-
-
-
+// Get space details
 exports.getSpaceDetails = async (req, res) => {   
   try {     
     const { id } = req.params;
@@ -149,11 +145,9 @@ exports.getSpaceDetails = async (req, res) => {
     const space = await Space.findById(id);      
 
     if (!space) {
-      req.flash('error', 'Space not found.');
-      return res.redirect('/dashboard');
-  }
+      return res.status(404).send('Space not found.');
+    }
   
-
     // Set up DOMPurify for server-side sanitization
     const window = new JSDOM('').window;
     const DOMPurify = createDOMPurify(window);
@@ -181,56 +175,59 @@ exports.getSpaceDetails = async (req, res) => {
      
     res.render('student/space-details', {
       space,
-      layout: 'layouts/d-main'
+      name: req.session.name || 'User'
     });
    
   } catch (err) {
-    try {
-      res.render('student/space-details', {
-        space,
-        layout: 'layouts/d-main'
-      });
-  } catch (err) {
-      console.error('Error fetching space details:', err);
-      req.flash('error', 'Error fetching space details. Please try again.');
-      res.redirect('/dashboard'); // Redirect with error message
-  }
-  
+    console.error('Error fetching space details:', err);
+    res.status(500).send('Error fetching space details. Please try again.');
   } 
 };
 
-
+// Download resume
 exports.downloadResume = (req, res) => {
-  const filePath = path.resolve(req.params.filePath); // Assuming secure paths
-  res.download(filePath, (err) => {
-    if (err) {
-      console.error('Error downloading file:', err);
-      res.status(500).send('Error downloading file');
+  try {
+    const filePath = path.resolve(path.join(__dirname, '../../public/Resumes', req.params.filePath));
+    
+    // Security check to prevent directory traversal
+    if (!filePath.startsWith(path.resolve(path.join(__dirname, '../../public/Resumes')))) {
+      return res.status(403).send('Access denied');
     }
-  });
+    
+    res.download(filePath, (err) => {
+      if (err) {
+        console.error('Error downloading file:', err);
+        res.status(500).send('Error downloading file');
+      }
+    });
+  } catch (err) {
+    console.error('Error in download route:', err);
+    res.status(500).send('Error processing download request');
+  }
 };
 
-
+// Start interview round
 exports.startInterviewRound = async (req, res) => {
   try {
     const { id, roundName } = req.params;
     const space = await Space.findById(id);
+
+    if (!space) {
+      return res.status(404).send('Space not found');
+    }
 
     const round = space.interviewRounds.find(r => r.name === roundName);
     if (!round) {
       return res.status(404).send('Round not found');
     }
 
-    round.status = 'completed';
-    round.summary = 'Summary generated after interview'; // Replace with actual logic
+    // Mark round as in progress
+    round.status = 'in_progress';
     await space.save();
 
-    res.redirect(`/space/${id}`);
+    res.redirect(`/space/${id}/round/${roundName}/start`);
   } catch (err) {
     console.error('Error starting interview round:', err);
     res.status(500).send('Error starting interview round');
   }
 };
-
-
-

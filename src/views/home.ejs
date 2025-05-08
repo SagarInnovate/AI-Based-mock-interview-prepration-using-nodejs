@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterviewAI Pro | Master Your Interview Skills</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax.js/1.5.0/parallax.min.js"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      background-color: #080B15;
+      color: #fff;
+    }
+    
+    .premium-gradient {
+      background: linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%);
+    }
+    
+    .premium-text-gradient {
+      background: linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    
+    .glow {
+      box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+    }
+    
+    .glow-text {
+      text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .hovering-card {
+      transition: all 0.5s ease;
+      transform-style: preserve-3d;
+    }
+    
+    .hovering-card:hover {
+      transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(138, 43, 226, 0.8) 0%, rgba(138, 43, 226, 0) 70%);
+      pointer-events: none;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+      25% { transform: translateY(-10px) translateX(5px) rotate(1deg); }
+      50% { transform: translateY(0px) translateX(10px) rotate(0deg); }
+      75% { transform: translateY(10px) translateX(5px) rotate(-1deg); }
+      100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    }
+    
+    .floating {
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 5px 0 rgba(138, 43, 226, 0.5); }
+      50% { box-shadow: 0 0 20px 5px rgba(138, 43, 226, 0.7); }
+      100% { box-shadow: 0 0 5px 0 rgba(138, 43, 226, 0.5); }
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 3s infinite;
+    }
+    
+    .neon-border {
+      position: relative;
+    }
+    
+    .neon-border::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #8A2BE2, #4169E1, #8A2BE2);
+      z-index: -1;
+      border-radius: inherit;
+      animation: animate-border 3s linear infinite;
+    }
+    
+    @keyframes animate-border {
+      0% { filter: blur(3px); opacity: 0.8; }
+      50% { filter: blur(5px); opacity: 1; }
+      100% { filter: blur(3px); opacity: 0.8; }
+    }
+    
+    .parallax-container {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple-button {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple-button:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .ripple-button:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+
+    .spotlight {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-image: radial-gradient(
+        circle at var(--x) var(--y),
+        rgba(138, 43, 226, 0.15) 0%,
+        rgba(138, 43, 226, 0) 50%
+      );
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    
+    .text-gradient {
+      background: linear-gradient(to right, #8A2BE2, #4169E1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .cta-button {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #8A2BE2, #4169E1, #8A2BE2);
+      z-index: -1;
+      background-size: 200% 200%;
+      animation: gradient-shift 5s ease infinite;
+    }
+    
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .shimmer::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      right: -100%;
+      bottom: -100%;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.03) 70%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(45deg) translate(0, 0);
+      animation: shimmer 3s infinite linear;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: rotate(45deg) translate(-100%, -100%); }
+      100% { transform: rotate(45deg) translate(100%, 100%); }
+    }
+    
+    .interactive-bg {
+      position: relative;
+    }
+    
+    .interactive-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(138, 43, 226, 0.15) 0%, rgba(0, 0, 0, 0) 80%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .matrix-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .typing-effect::after {
+      content: "|";
+      animation: blink 1s step-start infinite;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    
+    .scale-in {
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .scale-in.active {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    .rotate-in {
+      opacity: 0;
+      transform: translateY(40px) rotateX(-20deg);
+      transform-origin: top center;
+      transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .rotate-in.active {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+    
+    .stagger-fade-in > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    .stagger-fade-in.active > *:nth-child(1) { transition-delay: 0.1s; }
+    .stagger-fade-in.active > *:nth-child(2) { transition-delay: 0.2s; }
+    .stagger-fade-in.active > *:nth-child(3) { transition-delay: 0.3s; }
+    .stagger-fade-in.active > *:nth-child(4) { transition-delay: 0.4s; }
+    .stagger-fade-in.active > *:nth-child(5) { transition-delay: 0.5s; }
+    
+    .stagger-fade-in.active > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #080B15;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(138, 43, 226, 0.5);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(138, 43, 226, 0.8);
+    }
+    
+    .pricing-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .pricing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 50px -12px rgba(138, 43, 226, 0.25);
+    }
+    
+    .tilt-on-hover {
+      transition: transform 0.3s ease-out;
+    }
+    
+    .hidden-element {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .aurora {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(138, 43, 226, 0.1), rgba(65, 105, 225, 0.1));
+      filter: blur(150px);
+      pointer-events: none;
+      z-index: -1;
+      transform: translateY(-50%);
+      opacity: 0.6;
+    }
+    
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    
+  </style>
+</head>
+
+<body class="bg-[#080B15] text-white">
+  <div id="canvas-container"></div>
+
+  <!-- Navbar -->
+  <nav class="fixed w-full top-0 z-50 glass-card border-b border-purple-900/20">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      <div class="flex justify-between items-center py-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 premium-gradient rounded-lg flex items-center justify-center pulse-glow">
+            <i class="fas fa-robot text-white text-xl"></i>
+          </div>
+          <span class="font-bold text-xl text-white">InterviewAI<span class="premium-text-gradient font-extrabold">Pro</span></span>
+        </div>
+        
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#features" class="text-gray-300 hover:text-white transition-colors duration-300 text-sm font-medium">Features</a>
+          <a href="#workflow" class="text-gray-300 hover:text-white transition-colors duration-300 text-sm font-medium">How It Works</a>
+          <a href="#testimonials" class="text-gray-300 hover:text-white transition-colors duration-300 text-sm font-medium">Testimonials</a>
+          <!-- <a href="#pricing" class="text-gray-300 hover:text-white transition-colors duration-300 text-sm font-medium">Pricing</a> -->
+        </div>
+        
+        <div class="flex items-center">
+          <a href="/welcome" class="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-lg text-sm font-medium backdrop-blur-sm transition-all duration-300 border border-white/10 shimmer">Sign In</a>
+          <!-- <a href="#get-started" class="ml-4 bg-[#8A2BE2] hover:bg-[#7928c9] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all duration-300 cta-button shine-effect">Get Started</a> -->
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden pt-40 pb-24 md:pt-48 md:pb-32 px-6 sm:px-10">
+    <div class="aurora"></div>
+    <div class="aurora" style="transform: translateY(30%); opacity: 0.4;"></div>
+    
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+        <div class="scale-in" id="hero-content">
+          <div class="inline-block px-3 py-1 rounded-full bg-[#8A2BE2]/20 border border-[#8A2BE2]/30 backdrop-blur-sm text-xs font-medium text-[#8A2BE2] mb-6">
+            <span class="mr-1">✨</span> AI-Powered Interview Coach
+          </div>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+            Master Your <span class="premium-text-gradient glow-text">Interview Skills</span> With AI
+          </h1>
+          <p class="text-gray-300 text-lg mb-8 max-w-xl leading-relaxed">
+            Build confidence and outshine competitors with personalized AI interview coaching tailored to your experience and target role.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+            <a href="/welcome" class="cta-button text-white font-semibold px-8 py-4 rounded-xl text-center text-lg ripple-button">
+              Try For Free
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            
+            <!-- <a href="#how-it-works" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium px-8 py-4 rounded-xl text-center transition-all duration-300 text-lg flex items-center justify-center backdrop-blur-sm">
+              <i class="fas fa-play text-[#8A2BE2] mr-2"></i>
+              <span>Watch Demo</span>
+            </a> -->
+          </div>
+          
+          <!-- <div class="flex items-center space-x-4">
+            <div class="flex -space-x-2">
+              <img src="/api/placeholder/40/40" alt="User" class="w-10 h-10 rounded-full border-2 border-[#080B15]" />
+              <img src="/api/placeholder/40/40" alt="User" class="w-10 h-10 rounded-full border-2 border-[#080B15]" />
+              <img src="/api/placeholder/40/40" alt="User" class="w-10 h-10 rounded-full border-2 border-[#080B15]" />
+              <img src="/api/placeholder/40/40" alt="User" class="w-10 h-10 rounded-full border-2 border-[#080B15]" />
+              <div class="w-10 h-10 rounded-full bg-[#8A2BE2]/20 flex items-center justify-center text-sm font-semibold border-2 border-[#080B15]">10k+</div>
+            </div>
+            <div class="text-gray-400 text-sm">
+              <div class="flex mb-1">
+                <i class="fas fa-star text-amber-400"></i>
+                <i class="fas fa-star text-amber-400"></i>
+                <i class="fas fa-star text-amber-400"></i>
+                <i class="fas fa-star text-amber-400"></i>
+                <i class="fas fa-star-half-alt text-amber-400"></i>
+                <span class="ml-2 text-white font-medium">4.8/5</span>
+              </div>
+              <span>From 10,000+ successful candidates</span>
+            </div>
+          </div> -->
+        </div>
+        
+        <div class="rotate-in" id="hero-visual">
+          <div class="relative">
+            <div class="absolute top-0 left-0 w-full h-full bg-[#8A2BE2] rounded-3xl opacity-5 transform rotate-6"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[#4169E1] rounded-3xl opacity-5 transform -rotate-2"></div>
+            
+            <div class="glass-card rounded-3xl overflow-hidden border border-white/10 relative z-10 neon-border">
+              <div class="premium-gradient p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-md">
+                    <i class="fas fa-robot text-white"></i>
+                  </div>
+                  <span class="font-semibold text-white">AI Interview Session</span>
+                </div>
+                <div class="px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm flex items-center">
+                  <span class="w-2 h-2 bg-green-500 rounded-full pulse-glow"></span>
+                  <span class="ml-2 text-xs font-medium">LIVE</span>
+                </div>
+              </div>
+              
+              <div class="p-6 bg-[#0d121f]/80 backdrop-blur-lg">
+                <div class="flex justify-between mb-8">
+                  <div class="text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-[#8A2BE2]/20 backdrop-blur-md flex items-center justify-center border border-[#8A2BE2]/30 mb-2">
+                      <i class="fas fa-robot text-[#8A2BE2]"></i>
+                    </div>
+                    <span class="text-sm text-gray-400">AI Interviewer</span>
+                  </div>
+                  
+                  <div class="text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-blue-500/10 backdrop-blur-md flex items-center justify-center border border-blue-500/30 mb-2">
+                      <i class="fas fa-user text-blue-400"></i>
+                    </div>
+                    <span class="text-sm text-gray-400">You</span>
+                  </div>
+                </div>
+                
+                <div class="border-l-4 border-[#8A2BE2] pl-4 py-2 mb-8 typing-effect" id="interview-question">
+                  <p class="text-white">Tell me about a challenging project you worked on and how you overcame obstacles to complete it successfully.</p>
+                </div>
+                
+                <div class="glass-card p-4 rounded-lg mb-6 border border-white/10">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-400">Candidate's Response</span>
+                    <span class="text-xs text-gray-500">00:42</span>
+                  </div>
+                  <div class="h-10 bg-white/5 rounded-md flex items-center px-3">
+                    <div class="flex space-x-1 items-center">
+                      <div class="w-1.5 h-1.5 bg-[#8A2BE2] rounded-full" style="animation: blink 1.5s infinite 0s"></div>
+                      <div class="w-1.5 h-1.5 bg-[#8A2BE2] rounded-full" style="animation: blink 1.5s infinite 0.2s"></div>
+                      <div class="w-1.5 h-1.5 bg-[#8A2BE2] rounded-full" style="animation: blink 1.5s infinite 0.4s"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                  <div class="flex space-x-2">
+                    <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 transition-all">
+                      <i class="fas fa-microphone text-white"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 transition-all">
+                      <i class="fas fa-camera text-white"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 transition-all">
+                      <i class="fas fa-keyboard text-white"></i>
+                    </button>
+                  </div>
+                  <button class="w-10 h-10 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center hover:bg-red-600 transition-all">
+                    <i class="fas fa-times text-white"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="bg-[#0d121f] border-t border-white/5 p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                      <div class="text-sm font-medium text-blue-400">87%</div>
+                      <div class="text-xs text-gray-500">Confidence</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-sm font-medium text-green-400">92%</div>
+                      <div class="text-xs text-gray-500">Clarity</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-sm font-medium text-purple-400">95%</div>
+                      <div class="text-xs text-gray-500">Relevance</div>
+                    </div>
+                  </div>
+                  <div>
+                    <button class="px-3 py-1.5 rounded-lg bg-[#8A2BE2] hover:bg-[#7928c9] text-xs font-medium transition-all">Real-time Analysis</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="absolute -top-10 right-20 w-20 h-20 rounded-full premium-gradient opacity-10 floating"></div>
+    <div class="absolute top-40 -left-10 w-40 h-40 rounded-full bg-[#4169E1] opacity-10 floating" style="animation-delay: 1s"></div>
+    <div class="absolute bottom-10 right-10 w-30 h-30 rounded-full premium-gradient opacity-5 floating" style="animation-delay: 2s"></div>
+  </header>
+
+  <!-- Trusted By Section -->
+  <!-- <section class="py-12 px-6 sm:px-10 border-t border-b border-white/5 bg-white/2 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="text-gray-400 text-sm uppercase tracking-wider font-medium">Trusted by leading companies</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-70">
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+        <img src="/api/placeholder/120/40" alt="Company logo" class="h-8 object-contain filter grayscale opacity-70 hover:opacity-100 hover:filter-none transition-all" />
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Features Section -->
+  <section class="py-24 px-6 sm:px-10 relative" id="features">
+    <div class="aurora" style="opacity: 0.3; transform: translateY(0%);"></div>
+    
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 scale-in" id="features-heading">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-[#8A2BE2]/10 backdrop-blur-md border border-[#8A2BE2]/20 mb-4">
+          <span class="text-xs font-medium text-[#8A2BE2]">Advanced Features</span>
+        </div>
+        <h2 class="text-4xl font-bold mb-6">Cutting-Edge AI Interview Technology</h2>
+        <p class="text-gray-400 max-w-3xl mx-auto text-lg">Our platform combines state-of-the-art AI with proven interview techniques to create a personalized, immersive experience.</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-fade-in" id="features-grid">
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-brain text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Intelligent Question Generator</h3>
+          <p class="text-gray-400">Questions dynamically adapt based on your resume, job description, and previous answers.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Industry-specific questions</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+        
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-chart-line text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Performance Analytics</h3>
+          <p class="text-gray-400">Real-time analysis of your communication skills, confidence level, and answer quality.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Detailed reports & insights</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+        
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-video text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Video Mock Interviews</h3>
+          <p class="text-gray-400">Practice with realistic video interviewer and receive feedback on your body language.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Record & review sessions</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+        
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-comments text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Follow-up Questions</h3>
+          <p class="text-gray-400">Dynamic follow-up questions based on your responses, just like a real interviewer.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Natural conversation flow</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+        
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-microphone-alt text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Voice Analysis</h3>
+          <p class="text-gray-400">Get feedback on your speaking pace, tone, and verbal clarity during interviews.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Improve communication skills</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+        
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card shimmer">
+          <div class="w-14 h-14 premium-gradient rounded-lg flex items-center justify-center mb-6">
+            <i class="fas fa-briefcase text-white text-xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-3">Industry Specialization</h3>
+          <p class="text-gray-400">Tailored questions for tech, finance, healthcare, marketing, and many other industries.</p>
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-xs text-[#8A2BE2]">Role-specific preparation</span>
+            <i class="fas fa-arrow-right text-gray-500"></i>
+          </div>
+        </div>
+      </div>
+      
+      <!-- <div class="mt-16 text-center scale-in" id="features-cta">
+        <a href="#" class="inline-flex items-center text-[#8A2BE2] hover:text-[#7928c9] font-semibold">
+          <span>View all features</span>
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- Premium Feature Banner -->
+<section class="py-10 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-[#1E2330] border border-[#3D4154] rounded-xl p-6 relative overflow-hidden">
+      <!-- Gradient border effect -->
+      <div class="absolute inset-0 rounded-xl border border-transparent" 
+           style="background: linear-gradient(to right, #0FEF4F, #0099FF) border-box; 
+                 -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+                 -webkit-mask-composite: xor; 
+                 mask-composite: exclude;
+                 pointer-events: none;">
+      </div>
+      
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center mr-6">
+            <i class="fas fa-crown text-white text-2xl"></i>
+          </div>
+          
+          <div>
+            <div class="text-[#3498FF] text-xs font-medium uppercase tracking-wider mb-1">PREMIUM FEATURE</div>
+            <h3 class="text-white text-2xl font-bold mb-2">Interview with Industry Experts</h3>
+            <p class="text-gray-300 max-w-2xl">
+              Premium members can book mock interviews with real industry professionals who provide in-depth feedback and insider knowledge about what companies are looking for.
+            </p>
+          </div>
+        </div>
+        
+        <a href="#" class="bg-white hover:bg-gray-100 text-[#1E2330] font-medium px-6 py-3 rounded-lg whitespace-nowrap transition-colors">
+         Comming Soon 
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- How It Works Section -->
+  <section class="py-24 px-6 sm:px-10 bg-[#0a0e19] relative overflow-hidden" id="workflow">
+    <div class="spotlight"></div>
+    
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20 scale-in" id="workflow-heading">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-[#8A2BE2]/10 backdrop-blur-md border border-[#8A2BE2]/20 mb-4">
+          <span class="text-xs font-medium text-[#8A2BE2]">Seamless Experience</span>
+        </div>
+        <h2 class="text-4xl font-bold mb-6">How InterviewAI Pro Works</h2>
+        <p class="text-gray-400 max-w-3xl mx-auto text-lg">Prepare for your next interview in just three simple steps</p>
+      </div>
+      
+      <div class="grid lg:grid-cols-3 gap-12 relative">
+        <!-- Connection lines -->
+        <div class="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-[#8A2BE2]/0 via-[#8A2BE2]/50 to-[#8A2BE2]/0 transform -translate-y-1/2 z-0"></div>
+        
+        <!-- Step 1 -->
+        <div class="relative z-10 rotate-in" id="step-1">
+          <div class="relative">
+            <div class="glass-card rounded-xl p-8 border border-white/10 text-center relative">
+              <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-full premium-gradient flex items-center justify-center text-white text-2xl font-bold pulse-glow">1</div>
+              <div class="pt-6">
+                <!-- <img src="/api/placeholder/200/150" alt="Upload Resume" class="w-48 h-36 object-cover mx-auto rounded-lg mb-6" /> -->
+                <h3 class="text-xl font-semibold mb-4">Upload Your Resume</h3>
+                <p class="text-gray-400">Our AI analyzes your experience, skills, and career history to personalize your interview.</p>
+                
+                <div class="mt-8 glass-card p-4 rounded-lg border border-white/5 text-left">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-file-upload text-[#8A2BE2] mr-2"></i>
+                    <span class="text-sm font-medium">Supported formats</span>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">PDF</span>
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">DOCX</span>
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">TXT</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="relative z-10 rotate-in" id="step-2" style="animation-delay: 0.2s;">
+          <div class="relative">
+            <div class="glass-card rounded-xl p-8 border border-white/10 text-center relative">
+              <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-full premium-gradient flex items-center justify-center text-white text-2xl font-bold pulse-glow">2</div>
+              <div class="pt-6">
+                <!-- <img src="/api/placeholder/200/150" alt="Select Job" class="w-48 h-36 object-cover mx-auto rounded-lg mb-6" /> -->
+                <h3 class="text-xl font-semibold mb-4">Select Interview Type</h3>
+                <p class="text-gray-400">Choose the position you're targeting and the type of interview you want to practice.</p>
+                
+                <div class="mt-8 glass-card p-4 rounded-lg border border-white/5 text-left">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-briefcase text-[#8A2BE2] mr-2"></i>
+                    <span class="text-sm font-medium">Interview types</span>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">Technical</span>
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">Behavioral</span>
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">HR</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="relative z-10 rotate-in" id="step-3" style="animation-delay: 0.4s;">
+          <div class="relative">
+            <div class="glass-card rounded-xl p-8 border border-white/10 text-center relative">
+              <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-full premium-gradient flex items-center justify-center text-white text-2xl font-bold pulse-glow">3</div>
+              <div class="pt-6">
+                <!-- <img src="/api/placeholder/200/150" alt="Practice Interview" class="w-48 h-36 object-cover mx-auto rounded-lg mb-6" /> -->
+                <h3 class="text-xl font-semibold mb-4">Start Practicing</h3>
+                <p class="text-gray-400">Begin your personalized interview and receive detailed feedback and analysis.</p>
+                
+                <div class="mt-8 glass-card p-4 rounded-lg border border-white/5 text-left">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-chart-bar text-[#8A2BE2] mr-2"></i>
+                    <span class="text-sm font-medium">What you'll get</span>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">Performance Scores</span>
+                    <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400">Improvement Tips</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-20 text-center scale-in" id="workflow-cta">
+        <a href="/welcome" class="cta-button text-white font-semibold px-8 py-4 rounded-xl inline-flex items-center justify-center text-lg ripple-button">
+          <span>Start Your Practice Interview</span>
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-20 px-6 sm:px-10 relative border-t border-b border-white/5">
+    <div class="aurora" style="transform: rotate(180deg); opacity: 0.2;"></div>
+    
+    <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-10 text-center">
+      <div class="scale-in" id="stat-1">
+        <div class="glass-card rounded-xl p-8 border border-white/10 shimmer hovering-card">
+          <div class="w-20 h-20 premium-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-chart-line text-white text-2xl"></i>
+          </div>
+          <h3 class="text-5xl font-bold premium-text-gradient glow-text">87%</h3>
+          <p class="text-lg text-white mt-2 mb-4">Success Rate</p>
+          <p class="text-gray-400">Of our users report getting job offers after practicing with our platform</p>
+        </div>
+      </div>
+      
+      <div class="scale-in" id="stat-2" style="animation-delay: 0.2s;">
+        <div class="glass-card rounded-xl p-8 border border-white/10 shimmer hovering-card">
+          <div class="w-20 h-20 premium-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-user-tie text-white text-2xl"></i>
+          </div>
+          <h3 class="text-5xl font-bold premium-text-gradient glow-text">10K+</h3>
+          <p class="text-lg text-white mt-2 mb-4">Happy Users</p>
+          <p class="text-gray-400">Professionals from various industries have improved their interview skills</p>
+        </div>
+      </div>
+      
+      <div class="scale-in" id="stat-3" style="animation-delay: 0.4s;">
+        <div class="glass-card rounded-xl p-8 border border-white/10 shimmer hovering-card">
+          <div class="w-20 h-20 premium-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-clock text-white text-2xl"></i>
+          </div>
+          <h3 class="text-5xl font-bold premium-text-gradient glow-text">63%</h3>
+          <p class="text-lg text-white mt-2 mb-4">Time Saved</p>
+          <p class="text-gray-400">Average reduction in interview preparation time compared to traditional methods</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-24 px-6 sm:px-10 relative" id="testimonials">
+    <div class="aurora" style="opacity: 0.2;"></div>
+    
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 scale-in" id="testimonials-heading">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-[#8A2BE2]/10 backdrop-blur-md border border-[#8A2BE2]/20 mb-4">
+          <span class="text-xs font-medium text-[#8A2BE2]">Success Stories</span>
+        </div>
+        <h2 class="text-4xl font-bold mb-6">What Our Users Say</h2>
+        <p class="text-gray-400 max-w-3xl mx-auto text-lg">Real feedback from professionals who landed their dream jobs</p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8 stagger-fade-in" id="testimonials-grid">
+        <!-- Testimonial 1 -->
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card">
+          <div class="flex items-center mb-4">
+            <div class="text-amber-400 flex">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <span class="ml-2 text-gray-400">5.0</span>
+          </div>
+          <p class="text-gray-300 mb-6 leading-relaxed">"I was struggling with technical interviews until I found InterviewAI Pro. The personalized questions and detailed feedback helped me identify my weaknesses. Just landed a job at a top tech company!"</p>
+          <div class="flex items-center">
+            <img src="/api/placeholder/48/48" alt="User" class="w-12 h-12 rounded-full mr-4" />
+            <div>
+              <h4 class="font-medium text-white">Michael Chen</h4>
+              <p class="text-sm text-gray-400">Software Engineer at <span class="text-[#8A2BE2]">TechCorp</span></p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonial 2 -->
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card">
+          <div class="flex items-center mb-4">
+            <div class="text-amber-400 flex">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <span class="ml-2 text-gray-400">5.0</span>
+          </div>
+          <p class="text-gray-300 mb-6 leading-relaxed">"The feedback on my communication style was eye-opening. I realized I was using too many filler words and not structuring my answers well. After a week of practice, I aced my interviews!"</p>
+          <div class="flex items-center">
+            <img src="/api/placeholder/48/48" alt="User" class="w-12 h-12 rounded-full mr-4" />
+            <div>
+              <h4 class="font-medium text-white">Sophia Williams</h4>
+              <p class="text-sm text-gray-400">Product Manager at <span class="text-[#8A2BE2]">InnovateCo</span></p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonial 3 -->
+        <div class="glass-card rounded-xl p-6 border border-white/10 hovering-card">
+          <div class="flex items-center mb-4">
+            <div class="text-amber-400 flex">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <span class="ml-2 text-gray-400">4.7</span>
+          </div>
+          <p class="text-gray-300 mb-6 leading-relaxed">"As a career changer, I was nervous about interviewing in a new field. The industry-specific questions helped me prepare for exactly what hiring managers were looking for. Worth every penny!"</p>
+          <div class="flex items-center">
+            <img src="/api/placeholder/48/48" alt="User" class="w-12 h-12 rounded-full mr-4" />
+            <div>
+              <h4 class="font-medium text-white">James Rodriguez</h4>
+              <p class="text-sm text-gray-400">Data Analyst at <span class="text-[#8A2BE2]">DataDrive</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- <div class="mt-16 text-center scale-in" id="testimonials-cta">
+        <a href="#" class="inline-flex items-center text-[#8A2BE2] hover:text-[#7928c9] font-semibold">
+          <span>Read more success stories</span>
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div> -->
+    </div>
+  </section>
+
+
+
+
+
+  <script>
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize GSAP and ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+      
+      // Animate hero content
+      gsap.to('#hero-content', {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: "power3.out"
+      });
+      
+      gsap.to('#hero-visual', {
+        opacity: 1,
+        y: 0,
+        rotationX: 0,
+        duration: 1.2,
+        delay: 0.3,
+        ease: "power3.out"
+      });
+      
+      // Setup animations for sections
+      const sections = [
+        '#features-heading', '#features-grid', '#features-cta',
+        '#workflow-heading', '#step-1', '#step-2', '#step-3', '#workflow-cta',
+        '#stat-1', '#stat-2', '#stat-3',
+        '#testimonials-heading', '#testimonials-grid', '#testimonials-cta',
+        '#pricing-heading', '#pricing-free', '#pricing-pro', '#pricing-enterprise', '#pricing-faq',
+        '#cta-content'
+      ];
+      
+      sections.forEach(section => {
+        const element = document.querySelector(section);
+        if (element) {
+          gsap.set(element, { 
+            opacity: 0,
+            y: section.includes('heading') ? 30 : 0,
+            scale: section.includes('scale-in') ? 0.9 : 1
+          });
+          
+          ScrollTrigger.create({
+            trigger: element,
+            start: "top 80%",
+            onEnter: () => {
+              gsap.to(element, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.8,
+                ease: "power2.out"
+              });
+              
+              if (section.includes('grid')) {
+                element.classList.add('active');
+              }
+            }
+          });
+        }
+      });
+      
+      // Interactive hover effects
+      const cards = document.querySelectorAll('.hovering-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+      });
+      
+      // Spotlight effect
+      const spotlightElements = document.querySelectorAll('.spotlight');
+      spotlightElements.forEach(spotlight => {
+        const parent = spotlight.parentElement;
+        
+        parent.addEventListener('mousemove', e => {
+          const rect = parent.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          
+          spotlight.style.setProperty('--x', `${x}%`);
+          spotlight.style.setProperty('--y', `${y}%`);
+        });
+      });
+      
+      // Interactive background for elements with the class
+      const interactiveBgs = document.querySelectorAll('.interactive-bg');
+      interactiveBgs.forEach(bg => {
+        bg.addEventListener('mousemove', e => {
+          const rect = bg.getBoundingClientRect();
+          const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
+          const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
+          
+          bg.style.setProperty('--mouse-x', `${mouseX}%`);
+          bg.style.setProperty('--mouse-y', `${mouseY}%`);
+        });
+      });
+      
+      // Typing effect for interview question
+      const questionElement = document.getElementById('interview-question');
+      if (questionElement) {
+        const text = questionElement.querySelector('p').textContent;
+        questionElement.querySelector('p').textContent = '';
+        questionElement.querySelector('p').classList.add('typing-effect');
+        
+        let i = 0;
+        function typeWriter() {
+          if (i < text.length) {
+            questionElement.querySelector('p').textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 40);
+          } else {
+            questionElement.querySelector('p').classList.remove('typing-effect');
+          }
+        }
+        
+        setTimeout(typeWriter, 1000);
+      }
+      
+      // Canvas background with particles
+      const initCanvas = () => {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+        
+        // Three.js scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 50;
+        
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+        
+        // Add particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        
+        const posArray = new Float32Array(particlesCount * 3);
+        for (let i = 0; i < particlesCount * 3; i++) {
+          posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+          size: 0.2,
+          color: 0x8A2BE2,
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Animation
+        const animate = () => {
+          requestAnimationFrame(animate);
+          particlesMesh.rotation.x += 0.0003;
+          particlesMesh.rotation.y += 0.0005;
+          renderer.render(scene, camera);
+        };
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      };
+      
+      // Initialize canvas background
+      initCanvas();
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const navbarHeight = 80;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

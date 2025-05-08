@@ -10,9 +10,8 @@ const interviewRoundSchema = new mongoose.Schema({
 // Schema for the space (company)
 const spaceSchema = new mongoose.Schema({
   studentId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Student', 
-    required: true, // Reference to the student who created the space
+    type: String,  // Changed from ObjectId to String
+    required: true // Now stores the uniqueId instead of studentId
   },
   companyName: { 
     type: String, 

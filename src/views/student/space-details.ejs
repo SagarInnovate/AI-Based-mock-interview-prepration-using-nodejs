@@ -1,130 +1,1305 @@
-<script>
-    function escapeHtml(str) {
-    return str.replace(/[&<>"'\/]/g, function (char) {
-        switch (char) {
-            case '&': return '&amp;';
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '"': return '&quot;';
-            case "'": return '&#39;';
-            case '/': return '&#47;';
-            default: return char;
-        }
-    });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterviewAI Pro | Interview Space</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #080B15;
+      color: #fff;
+    }
+    
+    .premium-gradient {
+      background: linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%);
+    }
+    
+    .premium-text-gradient {
+      background: linear-gradient(135deg, #8A2BE2 0%, #4169E1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    
+    /* Add these styles to fix modal scrolling issues */
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
 }
-</script>
-<div class="container mt-5">
-  <!-- Header Section -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="theme-gradient">Space Details</h2>
-      <div class="btn-section">
+
+body.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Make modal content scrollable on mobile */
+@media (max-width: 640px) {
+  .modal-content {
+    max-height: 85vh;
+    width: 90%;
+  }
+}
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 3s infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 5px 0 rgba(138, 43, 226, 0.5); }
+      50% { box-shadow: 0 0 20px 5px rgba(138, 43, 226, 0.7); }
+      100% { box-shadow: 0 0 5px 0 rgba(138, 43, 226, 0.5); }
+    }
+    
+    .float-animation {
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    .hovering-card {
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    
+    .hovering-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .grow-on-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .grow-on-hover:hover {
+      transform: scale(1.03);
+    }
+    
+    .cta-button {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #8A2BE2, #4169E1, #8A2BE2);
+      z-index: -1;
+      background-size: 200% 200%;
+      animation: gradient-shift 5s ease infinite;
+    }
+    
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Status indicators */
+    .status-completed {
+      color: #10B981;
+    }
+    
+    .status-not-completed {
+      color: #EF4444;
+    }
+    
+    .status-in-progress {
+      color: #F59E0B;
+    }
+    
+    /* Aurora background effect */
+    .aurora {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(138, 43, 226, 0.05), rgba(65, 105, 225, 0.05));
+      filter: blur(150px);
+      pointer-events: none;
+      z-index: -1;
+      transform: translateY(-50%);
+      opacity: 0.3;
+    }
+
+    /* Modal transition */
+    .modal {
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-content {
+      transition: transform 0.3s ease;
+      transform: scale(0.95);
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    
+    /* Tab styling */
+    .tab {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tab.active {
+      color: white;
+    }
+    
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #8A2BE2, #4169E1);
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(138, 43, 226, 0.5);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(138, 43, 226, 0.7);
+    }
+    
+    /* Timeline styling */
+    .timeline-connector {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(138, 43, 226, 0.7), rgba(65, 105, 225, 0.7));
+      top: 25px;
+      bottom: 0;
+      left: 14px;
+      z-index: 0;
+    }
+    
+    /* Content transitions */
+    .tab-content {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+    }
+    
+    .tab-content.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      position: relative;
+    }
+    
+    /* Progress bar styling */
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 100%;
+      background: linear-gradient(90deg, #8A2BE2, #4169E1);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    
+    /* Badge styling */
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .badge-completed {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .badge-not-completed {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #EF4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .badge-in-progress {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <!-- Aurora background effects -->
+  <div class="aurora"></div>
+  <div class="aurora" style="transform: translateY(30%); opacity: 0.2;"></div>
+  
+  <!-- Floating elements -->
+  <div class="fixed top-20 left-10 w-24 h-24 premium-gradient opacity-10 rounded-full float-animation"></div>
+  <div class="fixed bottom-20 right-10 w-32 h-32 premium-gradient opacity-10 rounded-full float-animation" style="animation-delay: 1s"></div>
+  <div class="fixed top-1/3 right-20 w-16 h-16 premium-gradient opacity-10 rounded-full float-animation" style="animation-delay: 2s"></div>
+
+  <!-- Top navigation bar -->
+  <nav class="glass-card fixed top-0 w-full z-30 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <div class="w-10 h-10 premium-gradient rounded-lg flex items-center justify-center pulse-glow">
+            <i class="fas fa-robot text-white"></i>
+          </div>
+          <span class="ml-3 font-bold text-xl text-white">InterviewAI<span class="premium-text-gradient font-extrabold">Pro</span></span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex border border-white/10 rounded-full p-1">
+            <a href="/dashboard" class="p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-th-large"></i>
+            </a>
+            <a href="/profile" class="p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-user"></i>
+            </a>
+            <a href="/end-session" class="p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-sign-out-alt"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Main content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+    <!-- Breadcrumb navigation -->
+    <div class="mb-6">
+      <div class="flex items-center text-sm text-white/60">
+        <a href="/dashboard" class="hover:text-white transition-colors">Dashboard</a>
+        <i class="fas fa-chevron-right mx-2 text-xs"></i>
+        <span class="text-white">Interview Space</span>
+      </div>
+    </div>
+    
+    <!-- Company header with floating resume card -->
+    <div class="relative">
+      <!-- Main company info -->
+      <div class="glass-card rounded-xl overflow-hidden">
+        <div class="h-32 bg-gradient-to-r from-purple-900/30 to-blue-900/30 relative">
+          <!-- Decorative elements -->
+          <div class="absolute top-3 left-3 w-12 h-12 rounded-full bg-white/5"></div>
+          <div class="absolute bottom-5 right-10 w-16 h-16 rounded-full bg-white/5"></div>
+          <div class="absolute top-10 right-32 w-8 h-8 rounded-full bg-white/5"></div>
+        </div>
+        
+        <div class="px-8 pb-6 relative">
+          <!-- Company logo/icon -->
+          <div class="w-20 h-20 premium-gradient rounded-2xl flex items-center justify-center absolute -top-10 ml-2 shadow-lg">
+            <i class="fas fa-building text-white text-2xl"></i>
+          </div>
+          
+          <!-- Company details -->
+          <div class="pt-14 flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 class="text-3xl font-bold"><%= space.companyName %></h1>
+              <p class="text-xl text-white/80 mt-1"><%= space.jobPosition %></p>
+            </div>
+            
+            <!-- Progress overview -->
+            <div class="mt-4 md:mt-0 bg-white/5 rounded-xl p-3 border border-white/10">
+              <div class="flex items-center mb-2">
+                <span class="text-sm text-white/70">Interview Progress</span>
+                <% 
+                  const completedRounds = space.interviewRounds.filter(r => r.status === 'completed').length;
+                  const totalRounds = space.interviewRounds.length;
+                  const progressPercentage = totalRounds > 0 ? (completedRounds / totalRounds) * 100 : 0;
+                %>
+                <span class="ml-auto text-sm font-semibold"><%= completedRounds %>/<%= totalRounds %></span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-value" style="width: <%= progressPercentage %>%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Floating resume card -->
+      <div class="glass-card rounded-xl p-5 shadow-lg md:absolute md:top-24 md:right-8 md:w-72 mt-4 md:mt-0 hovering-card border border-white/10">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Resume</h3>
           <% if (space.resumePath) { %>
-              <a class="btn-default bg-solid-primary" href="/Resumes/<%= space.resumePath %>">
-                  <span class="icon"><i class="feather-file"></i></span>
-                  <span>Download Resume</span>
-              </a>
-          <% } else { %>
-              <span>No resume uploaded</span>
+            <a href="/space/resume/download/<%= space._id %>" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-download mr-1"></i>
+              Download
+            </a>
           <% } %>
-      </div>
-  </div>
-
-  <h3 class="section-title">Company Name: <strong><%= space.companyName %></strong></h3>
-  <h3 class="section-title">Position: <strong><%= space.jobPosition %></strong></h3>
-
-  <!-- Job Description and Resume Summary -->
-  <div class="mb-4">
-      <div class="rainbow-accordion-style accordion">
-          <div class="accordion" id="accordionExample">
-              <div class="accordion-item card bg-flashlight">
-                  <h2 class="accordion-header card-header" id="headingJobDesc">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#collapseJobDesc" aria-expanded="false" aria-controls="collapseJobDesc">
-                          Job Description
-                      </button>
-                  </h2>
-                  <div id="collapseJobDesc" class="accordion-collapse collapse" aria-labelledby="headingJobDesc"
-                      data-bs-parent="#accordionExample">
-                      <div class="accordion-body card-body">
-                          <%- space.jobDescription || "N/A" %>
-                      </div>
-                  </div>
-              </div>
-
-              <div class="accordion-item card bg-flashlight">
-                  <h2 class="accordion-header card-header" id="headingSummary">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#collapseSummary" aria-expanded="false" aria-controls="collapseSummary">
-                          Summary of Resume
-                      </button>
-                  </h2>
-                  <div id="collapseSummary" class="accordion-collapse collapse" aria-labelledby="headingSummary"
-                      data-bs-parent="#accordionExample">
-                      <div class="accordion-body card-body">
-                          <%- space.purifiedSummary || "No summary available" %>
-                      </div>
-                  </div>
-              </div>
+        </div>
+        
+        <% if (space.purifiedSummary && space.purifiedSummary.length > 0) { %>
+          <div class="text-sm text-white/70 max-h-40 overflow-y-auto pr-2 resume-summary-preview">
+            <!-- We'll just show a preview here -->
+            <%- space.purifiedSummary.substring(0, 150) + "..." %>
           </div>
-      </div>
-  </div>
-  <hr>
-  <hr>
-
-  <h3 class="title">Interview Rounds</h3>
-  <div class="row row--15 service-wrapper">
-      <% space.interviewRounds.forEach(round => { %>
-          <div class="col-lg-3 col-md-4 col-sm-6 col-6 sal-animate" data-sal="slide-up" data-sal-duration="700" data-sal-delay="0">
-              <div class="service service__style--1 bg-color-blackest radius mt--25 text-center rbt-border-none variation-4 bg-flashlight">
-                  <div class="content">
-                      <h4 class="title"><%= round.name %></h4>
-                      <% if (round.status === 'not completed') { %>
-                          <div class="header-btn d-none d-md-block">
-                              <a class="btn-default btn-small round" href="/space/<%= space._id %>/round/<%= round.name %>/start">
-                                  Start Interview <i class="feather-start"></i>
-                              </a>
-                          </div>
-                      <% } else { %>
-                          <div class="header-btn d-none d-md-block">
-                              <a class="btn-default btn-small round" data-bs-toggle="modal" data-bs-target="#summaryModal" 
-                                 data-summary="<%= round.summaryHTML%> ">
-                                  View Summary <i class="feather-start"></i>
-                              </a>
-                          </div>
-                      <% } %>
-                  </div>
-              </div>
-          </div>
-      <% }) %>
-  </div>
-  
-  
-</div>
-
-<!-- Modal for Viewing Summary -->
-<div id="summaryModal" class="modal rbt-modal-box like-modal fade" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content wrapper top-flashlight leftside light-xl">
-          <h5 class="title">Interview Summary</h5>
-          <div id="summaryContent">
-              <!-- Summary content will be dynamically injected -->
-          </div>
-          <button class="close-button" data-bs-dismiss="modal">
-              <i class="feather-x"></i>
+          <button id="viewFullSummaryBtn" class="mt-3 w-full text-center text-sm text-white/70 hover:text-white border border-white/10 rounded-lg py-2 hover:bg-white/5 transition-colors">
+            View Full Summary
           </button>
+        <% } else { %>
+          <div class="flex flex-col items-center justify-center py-4">
+            <i class="fas fa-file-alt text-white/30 text-3xl mb-2"></i>
+            <p class="text-sm text-white/50 text-center">Resume summary not available</p>
+          </div>
+        <% } %>
       </div>
+    </div>
+    
+    <!-- Main content tabs -->
+    <div class="mt-8">
+      <!-- Tab navigation -->
+      <div class="flex border-b border-white/10 mb-6">
+        <button class="tab active px-4 py-3 text-white font-medium" data-tab="rounds">
+          Interview Rounds
+        </button>
+        <button class="tab px-4 py-3 text-white/60 font-medium" data-tab="details">
+          Job Details
+        </button>
+        <button class="tab px-4 py-3 text-white/60 font-medium" data-tab="performance">
+          Performance
+        </button>
+      </div>
+      
+      <!-- Tab content -->
+      <div class="relative min-h-[400px]">
+        <!-- Interview Rounds Tab -->
+        <div id="roundsTab" class="tab-content active">
+          <!-- Round cards in grid with adaptive layout -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% space.interviewRounds.forEach((round, index) => { %>
+              <div class="glass-card rounded-xl overflow-hidden grow-on-hover border border-white/10">
+                <div class="p-5">
+                  <!-- Round status badge -->
+                  <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-lg font-semibold"><%= round.name %> Round</h3>
+                    <% if (round.status === 'completed') { %>
+                      <span class="badge badge-completed">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        Completed
+                      </span>
+                    <% } else if (round.status === 'in_progress') { %>
+                      <span class="badge badge-in-progress">
+                        <i class="fas fa-spinner mr-1"></i>
+                        In Progress
+                      </span>
+                    <% } else { %>
+                      <span class="badge badge-not-completed">
+                        <i class="fas fa-clock mr-1"></i>
+                        Not Started
+                      </span>
+                    <% } %>
+                  </div>
+                  
+                  <!-- Round icon and description -->
+                  <div class="flex mb-5">
+                    <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <% if (round.name.toLowerCase().includes('hr')) { %>
+                        <i class="fas fa-user-tie text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('tech')) { %>
+                        <i class="fas fa-code text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('system')) { %>
+                        <i class="fas fa-sitemap text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('behavior')) { %>
+                        <i class="fas fa-brain text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('culture')) { %>
+                        <i class="fas fa-users text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('case')) { %>
+                        <i class="fas fa-clipboard-list text-white/70"></i>
+                      <% } else if (round.name.toLowerCase().includes('final')) { %>
+                        <i class="fas fa-flag-checkered text-white/70"></i>
+                      <% } else { %>
+                        <i class="fas fa-comments text-white/70"></i>
+                      <% } %>
+                    </div>
+                    <div>
+                      <p class="text-sm text-white/70">
+                        <% if (round.status === 'completed') { %>
+                          This round has been completed. You can view the summary of your performance.
+                        <% } else if (round.status === 'in_progress') { %>
+                          This round is currently in progress. Continue where you left off.
+                        <% } else { %>
+                          Prepare for <%= round.name.toLowerCase() %> interview questions with AI-powered practice.
+                        <% } %>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <!-- Action button -->
+                  <% if (round.status === 'not completed') { %>
+                    <a href="/space/<%= space._id %>/round/<%= round.name %>/start" 
+                       class="cta-button text-white font-semibold px-4 py-2 rounded-lg w-full flex items-center justify-center">
+                      <i class="fas fa-play mr-2"></i>
+                      Start Interview
+                    </a>
+                  <% } else if (round.status === 'in_progress') { %>
+                    <a href="/space/<%= space._id %>/round/<%= round.name %>/continue" 
+                       class="bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2 rounded-lg w-full flex items-center justify-center transition-colors">
+                      <i class="fas fa-redo mr-2"></i>
+                      Continue
+                    </a>
+                  <% } else { %>
+                    <button class="bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2 rounded-lg w-full flex items-center justify-center transition-colors view-summary-btn"
+                            data-round-id="<%= round._id %>" 
+                            data-round-name="<%= round.name %>">
+                      <i class="fas fa-chart-bar mr-2"></i>
+                      View Summary
+                    </button>
+                  <% } %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        
+        <!-- Job Details Tab -->
+        <div id="detailsTab" class="tab-content">
+          <div class="glass-card rounded-xl p-6 mb-6">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-briefcase text-white/70"></i>
+              </div>
+              <h3 class="text-xl font-semibold">Job Description</h3>
+            </div>
+            <div class="prose prose-invert max-w-none text-white/80">
+              <% if (space.jobDescription && space.jobDescription.length > 0) { %>
+                <%- space.jobDescription %>
+              <% } else { %>
+                <div class="flex flex-col items-center justify-center py-8">
+                  <i class="fas fa-file-alt text-white/30 text-4xl mb-3"></i>
+                  <p class="text-white/50">No job description available</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+          <!-- Key requirements card -->
+          <div class="glass-card rounded-xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-list-check text-white/70"></i>
+              </div>
+              <h3 class="text-xl font-semibold">Key Skills & Requirements</h3>
+            </div>
+            
+            <!-- Auto-generated from job description and resume -->
+            <div id="keyRequirements" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- This content will be dynamically generated from the job description -->
+              <div class="p-4 relative">
+                <p class="text-white/70 italic">Key skills and requirements will be extracted from the job description.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Performance Tab -->
+        <div id="performanceTab" class="tab-content">
+          <div class="glass-card rounded-xl p-6 mb-6">
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-chart-line text-white/70"></i>
+              </div>
+              <h3 class="text-xl font-semibold">Performance Overview</h3>
+            </div>
+            
+            <!-- Performance stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+              <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p class="text-sm text-white/60 mb-1">Completion Rate</p>
+                <div class="flex items-end justify-between">
+                  <p class="text-3xl font-bold">
+                    <%= Math.round(progressPercentage) %>%
+                  </p>
+                  <div class="w-12 h-12 premium-gradient rounded-full flex items-center justify-center">
+                    <i class="fas fa-check text-white"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p class="text-sm text-white/60 mb-1">Total Questions</p>
+                <div class="flex items-end justify-between">
+                  <p class="text-3xl font-bold">
+                    <%= completedRounds * 15 %> <!-- Estimate 15 questions per round -->
+                  </p>
+                  <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fas fa-question text-white"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                <p class="text-sm text-white/60 mb-1">Practice Time</p>
+                <div class="flex items-end justify-between">
+                  <p class="text-3xl font-bold">
+                    <%= completedRounds * 30 %> min <!-- Estimate 30 minutes per round -->
+                  </p>
+                  <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <i class="fas fa-clock text-white"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Floating action button for mobile -->
+  <div class="fixed right-6 bottom-6 md:hidden">
+    <a href="/dashboard" class="w-12 h-12 premium-gradient rounded-full flex items-center justify-center shadow-lg pulse-glow">
+      <i class="fas fa-home text-white"></i>
+    </a>
   </div>
-</div>
+  
+  <!-- Resume Summary Modal -->
+  <div id="resumeSummaryModal" class="modal fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0">
+    <div class="modal-content glass-card rounded-xl border border-white/20 p-6 max-w-2xl w-full mx-4">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 premium-gradient rounded-full flex items-center justify-center mr-3">
+            <i class="fas fa-file-alt text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold">Resume Summary</h3>
+        </div><% if (completedRounds > 0) { %>
+          <div class="mt-8">
+            <h4 class="text-lg font-semibold mb-4">Interview Timeline</h4>
+            <div class="relative pl-8">
+              <div class="timeline-connector"></div>
+              <% 
+                const completedRoundsArray = space.interviewRounds
+                  .filter(r => r.status === 'completed')
+                  .map((r, i) => {
+                    const mockDate = new Date();
+                    mockDate.setDate(mockDate.getDate() - i);
+                    return {
+                      ...r,
+                      date: mockDate
+                    };
+                  });
+              %>
+              
+              <!-- Debug section to show round object properties -->
+              <div class="glass-card rounded-xl p-4 border border-red-500/50 mb-6">
+                <h5 class="font-semibold text-red-400 mb-2">Debug: Round Object Structure</h5>
+                <pre class="text-xs text-white/70 overflow-auto max-h-60 bg-black/30 p-2 rounded">
+                  <% completedRoundsArray.forEach((round, index) => { %>
+        Round <%= index + 1 %>:
+        <%- JSON.stringify(round, null, 2) %>
+        
+                  <% }) %>
+                </pre>
+              </div>
+              
+              <!-- Regular display of rounds continues here -->
+              <% completedRoundsArray.forEach((round, index) => { %>
+                <div class="mb-6 relative">
+                  <div class="absolute left-[-30px] top-0 w-7 h-7 rounded-full premium-gradient flex items-center justify-center z-10">
+                    <i class="fas fa-check text-white text-xs"></i>
+                  </div>
+                  <div class="glass-card rounded-xl p-4 border border-white/10">
+                    <div class="flex justify-between items-start mb-2">
+                      <h5 class="font-semibold"><%= round.name %> Round</h5>
+                      <span class="text-xs text-white/50">
+                        <%= round.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %>
+                      </span>
+                    </div>
+                    <p class="text-sm text-white/70 mb-3">
+                      <% if (round.summary && round.summary.length > 50) { %>
+                        <%= round.summary.substring(0, 100) %>...
+                      <% } else { %>
+                        Interview completed successfully.
+                      <% } %>
+                    </p>
+                    <button class="text-xs text-white/60 hover:text-white border border-white/10 rounded-lg px-3 py-1 hover:bg-white/5 transition-colors view-summary-btn"
+                            data-round-id="<%= round._id %>" 
+                            data-round-name="<%= round.name %>">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } else { %>
+          <div class="flex flex-col items-center justify-center py-8">
+            <i class="fas fa-chart-bar text-white/30 text-4xl mb-3"></i>
+            <p class="text-white/50">Complete interview rounds to see your performance data</p>
+          </div>
+        <% } %>
+        <button class="modal-close text-white/70 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <!-- Modal content -->
+      <div class="prose prose-invert max-w-none mb-6 max-h-[60vh] overflow-y-auto pr-2">
+        <% if (space.purifiedSummary && space.purifiedSummary.length > 0) { %>
+          <%- space.purifiedSummary %>
+        <% } else { %>
+          <div class="flex flex-col items-center justify-center py-8">
+            <i class="fas fa-file-alt text-white/30 text-4xl mb-3"></i>
+            <p class="text-white/50">No resume summary is available. This could be because:</p>
+            <ul class="text-white/50 list-disc ml-6 mt-2">
+              <li>The resume couldn't be parsed correctly</li>
+              <li>The summary generation is still in progress</li>
+              <li>There was an issue with the AI summarization service</li>
+            </ul>
+          </div>
+        <% } %>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="flex justify-end pt-4 border-t border-white/10">
+        <button type="button" class="modal-close bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-lg">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Interview Summary Modal -->
+  <div id="interviewSummaryModal" class="modal fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0">
+    <div class="modal-content glass-card rounded-xl border border-white/20 p-6 max-w-4xl w-full mx-4">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 premium-gradient rounded-full flex items-center justify-center mr-3">
+            <i class="fas fa-chart-bar text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold">Interview Summary</h3>
+        </div>
+        <button class="modal-close text-white/70 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <!-- Modal tabs -->
+      <div class="border-b border-white/10 mb-6">
+        <div class="flex">
+          <button class="summary-tab active px-4 py-3 text-white font-medium" data-tab="summary">
+            Overview
+          </button>
+          <button class="summary-tab px-4 py-3 text-white/60 font-medium" data-tab="questions">
+            Questions & Answers
+          </button>
+          <button class="summary-tab px-4 py-3 text-white/60 font-medium" data-tab="feedback">
+            Detailed Feedback
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal content sections -->
+      <div class="summary-sections relative min-h-[300px]">
+        <!-- Summary Tab -->
+        <div id="summaryTab" class="summary-section active">
+          <div id="summaryContent" class="prose prose-invert max-w-none mb-6 max-h-[50vh] overflow-y-auto pr-2">
+            <!-- Summary content will be dynamically injected here -->
+          </div>
+          
+          <!-- Key strengths and areas to improve -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+              <h4 class="font-semibold flex items-center mb-3">
+                <i class="fas fa-thumbs-up text-green-500 mr-2"></i>
+                Key Strengths
+              </h4>
+              <ul id="keyStrengths" class="text-sm text-white/70 space-y-2">
+                <!-- Will be dynamically generated -->
+              </ul>
+            </div>
+            
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+              <h4 class="font-semibold flex items-center mb-3">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                Areas to Improve
+              </h4>
+              <ul id="areasToImprove" class="text-sm text-white/70 space-y-2">
+                <!-- Will be dynamically generated -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Questions Tab -->
+        <div id="questionsTab" class="summary-section hidden">
+          <div class="max-h-[60vh] overflow-y-auto pr-2">
+            <div id="questionsContent" class="space-y-4">
+              <!-- Will be dynamically generated -->
+              <p class="text-white/70 text-center py-8">Loading questions and answers...</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Feedback Tab -->
+        <div id="feedbackTab" class="summary-section hidden">
+          <div class="max-h-[60vh] overflow-y-auto pr-2">
+            <div id="feedbackContent" class="space-y-4">
+              <!-- Will be dynamically generated -->
+              <p class="text-white/70 text-center py-8">Loading detailed feedback...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="flex justify-between pt-4 border-t border-white/10 mt-6">
+        <button type="button" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-lg" id="practiceAgainBtn">
+          <i class="fas fa-redo mr-2"></i>
+          Practice Again
+        </button>
+        <button type="button" class="modal-close bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-lg">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
 
-<script>
-  // Injecting dynamic summary content into the modal
-  document.addEventListener('click', function (event) {
-      if (event.target.matches('[data-bs-target="#summaryModal"]')) {
-          const summary = event.target.getAttribute('data-summary');
-          document.getElementById('summaryContent').innerHTML = summary || 'No summary available.';
-      }
+  <script>
+    // Store round summaries in a JavaScript object
+    const roundSummaries = {
+      <% space.interviewRounds.forEach(round => { %>
+        <% if (round.status === 'completed' && round.summary) { %>
+          '<%= round._id %>': `<%- round.summaryHTML || round.summary || 'No summary available' %>`,
+        <% } %>
+      <% }); %>
+    };
+    
+// Update modal functionality in space-details.ejs
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden'); // Prevent body scrolling
+  
+  // Delay to ensure transition works
+  setTimeout(() => {
+    modal.classList.add('show');
+    modal.style.opacity = '1';
+  }, 10);
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.remove('show');
+  modal.style.opacity = '0';
+  document.body.classList.remove('overflow-hidden'); // Re-enable body scrolling
+  
+  // Delay to match transition duration
+  setTimeout(() => {
+    modal.classList.add('hidden');
+  }, 300);
+}
+
+// Update modal click handler to only close when explicitly clicking the close button
+$('.modal').on('click', function(e) {
+  // Only close if clicking directly on the modal background AND the modal is set to allow outside clicks
+  if ($(e.target).hasClass('modal') && $(this).data('allow-outside-close') === true) {
+    const modalId = $(this).attr('id');
+    closeModal(modalId);
+  }
+});
+
+// Add this to your CSS
+    // Tab switching functionality
+    function switchTab(tabId) {
+      // Main tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.dataset.tab === tabId) {
+          tab.classList.add('active');
+          tab.classList.remove('text-white/60');
+          tab.classList.add('text-white');
+        } else {
+          tab.classList.remove('active');
+          tab.classList.add('text-white/60');
+          tab.classList.remove('text-white');
+        }
+      });
+      
+      document.querySelectorAll('.tab-content').forEach(content => {
+        const contentId = content.id;
+        if (contentId === tabId + 'Tab') {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+    }
+    
+    // Summary modal tab switching
+    function switchSummaryTab(tabId) {
+      // Summary tabs
+      document.querySelectorAll('.summary-tab').forEach(tab => {
+        if (tab.dataset.tab === tabId) {
+          tab.classList.add('active');
+          tab.classList.remove('text-white/60');
+          tab.classList.add('text-white');
+        } else {
+          tab.classList.remove('active');
+          tab.classList.add('text-white/60');
+          tab.classList.remove('text-white');
+        }
+      });
+      
+      document.querySelectorAll('.summary-section').forEach(content => {
+        const contentId = content.id;
+        if (contentId === tabId + 'Tab') {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      });
+    }
+    
+// Replace extractKeyPoints in space-details.ejs
+function extractKeyPoints(summaryText) {
+  if (!summaryText) return { strengths: [], improvements: [] };
+  
+  const strengths = [];
+  const improvements = [];
+  
+  // Function to extract sentences with specific keywords
+  function extractSentences(text, keywords) {
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+    return sentences.filter(sentence => 
+      keywords.some(keyword => sentence.toLowerCase().includes(keyword.toLowerCase()))
+    );
+  }
+  
+  // Keywords for strengths
+  const strengthKeywords = ['strength', 'strong', 'excellent', 'good', 'well', 'impressive', 
+                          'demonstrated', 'effective', 'successfully', 'clear', 'confident'];
+  
+  // Keywords for improvements
+  const improvementKeywords = ['improve', 'work on', 'develop', 'enhance', 'could be better',
+                             'should', 'need to', 'lacking', 'missing', 'recommend', 'consider'];
+  
+  // Extract sentences with keywords
+  const strengthSentences = extractSentences(summaryText, strengthKeywords);
+  const improvementSentences = extractSentences(summaryText, improvementKeywords);
+  
+  // Format sentences to be more concise
+  strengthSentences.forEach(sentence => {
+    const cleaned = sentence.trim()
+      .replace(/^[.,\s]+/, '')
+      .replace(/your strengths? (include|are|is|was|were):?\s*/i, '')
+      .replace(/you (demonstrated|showed|exhibited|displayed):?\s*/i, '');
+    
+    if (cleaned.length > 10 && !strengths.includes(cleaned))
+      strengths.push(cleaned);
   });
+  
+  improvementSentences.forEach(sentence => {
+    const cleaned = sentence.trim()
+      .replace(/^[.,\s]+/, '')
+      .replace(/areas? (to|for) improve(ment)?:?\s*/i, '')
+      .replace(/you (could|should|need to|might want to):?\s*/i, '');
+    
+    if (cleaned.length > 10 && !improvements.includes(cleaned))
+      improvements.push(cleaned);
+  });
+  
+  // If extraction failed, create some generic points based on the summary
+  if (strengths.length === 0) {
+    if (summaryText.match(/communicat|speak|articula/i))
+      strengths.push("Clear communication skills");
+    if (summaryText.match(/technical|knowledge|understand/i))
+      strengths.push("Good understanding of technical concepts");
+    if (summaryText.match(/problem|solution|approach|analy/i))
+      strengths.push("Effective problem-solving approach");
+  }
+  
+  if (improvements.length === 0) {
+    improvements.push("Consider providing more specific examples");
+    improvements.push("Practice structured answer delivery");
+    if (summaryText.match(/technical|concept|knowledge/i))
+      improvements.push("Deepen technical knowledge in key areas");
+  }
+  
+  return {
+    strengths: strengths.slice(0, 3), // Limit to top 3
+    improvements: improvements.slice(0, 3) // Limit to top 3
+  };
+}
 
+    // Replace generateMockQA function with this:
+async function fetchActualQA(roundId, roundName) {
+  try {
+    // Fetch the actual questions and answers from the server
+    const response = await fetch(`/api/questions-answers/${roundId}`);
+    if (!response.ok) throw new Error('Failed to fetch questions and answers');
+    const questionsAnswers = await response.json();
+    
+    let html = '';
+    // No questions found case
+    if (!questionsAnswers || questionsAnswers.length === 0) {
+      return `
+        <div class="glass-card rounded-xl p-4 border border-white/10 text-center">
+          <p class="text-white/70">No questions and answers found for this round.</p>
+        </div>
+      `;
+    }
+    
+    // Generate HTML for each question-answer pair
+    questionsAnswers.forEach((qa, index) => {
+      html += `
+        <div class="glass-card rounded-xl p-4 border border-white/10">
+          <div class="mb-3">
+            <div class="flex items-center">
+              <div class="w-8 h-8 premium-gradient rounded-full flex items-center justify-center mr-2 flex-shrink-0">
+                <i class="fas fa-question text-white text-xs"></i>
+              </div>
+              <h4 class="font-medium">${qa.question}</h4>
+            </div>
+          </div>
+          <div class="pl-10">
+            <p class="text-sm text-white/70 mb-2">${qa.answer || 'No answer provided'}</p>
+            <div class="flex items-center text-xs text-white/50 mt-2">
+              <i class="fas fa-chart-line mr-1"></i>
+              <span>Confidence: ${qa.confidence || 'N/A'}</span>
+              <i class="fas fa-clock ml-3 mr-1"></i>
+              <span>Response time: ${qa.responseTime || 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    return html;
+  } catch (error) {
+    console.error('Error fetching Q&A:', error);
+    return `
+      <div class="glass-card rounded-xl p-4 border border-white/10 text-center">
+        <p class="text-white/70">Error loading questions and answers.</p>
+      </div>
+    `;
+  }
+}
 
+// Update the view-summary-btn click handler:
+$('.view-summary-btn').on('click', async function() {
+  const roundId = $(this).data('round-id');
+  const roundName = $(this).data('round-name');
+  
+  // Update modal title
+  $('#interviewSummaryModal h3').text(`${roundName} Round Summary`);
+  
+  // Get the summary from our object and display it
+  const summary = roundSummaries[roundId] || 'No summary available for this round.';
+  $('#summaryContent').html(summary.replace(/\n/g, '<br>'));
+  
+  // Extract key points from summary
+  const keyPoints = extractKeyPoints(summary);
+  
+  // Update strengths and improvements lists
+  $('#keyStrengths').empty();
+  keyPoints.strengths.forEach(strength => {
+    $('#keyStrengths').append(`<li class="flex items-start">
+      <i class="fas fa-check text-green-500 mr-2 mt-1 flex-shrink-0"></i>
+      <span>${strength}</span>
+    </li>`);
+  });
+  
+  $('#areasToImprove').empty();
+  keyPoints.improvements.forEach(improvement => {
+    $('#areasToImprove').append(`<li class="flex items-start">
+      <i class="fas fa-arrow-right text-yellow-500 mr-2 mt-1 flex-shrink-0"></i>
+      <span>${improvement}</span>
+    </li>`);
+  });
+  
+  // Fetch actual Q&A data
+  const qaHtml = await fetchActualQA(roundId, roundName);
+  $('#questionsContent').html(qaHtml);
+  
+  // Fetch actual feedback data or use the existing function
+  $('#feedbackContent').html(generateFeedback(roundId));
+  
+  // Show the modal
+  openModal('interviewSummaryModal');
+  
+  // Reset to the summary tab
+  switchSummaryTab('summary');
+});
 
-</script>
+// Replace generateMockFeedback with this in space-details.ejs
+function generateFeedback(roundId) {
+  // Try to parse actual feedback from the summary
+  const summary = roundSummaries[roundId] || '';
+  
+  // Categories to analyze
+  const categories = [
+    { name: 'Communication Style', regex: /communicat|speak|articula|express/i },
+    { name: 'Technical Knowledge', regex: /technical|knowledge|understand|concept/i },
+    { name: 'Problem Solving', regex: /problem|solution|approach|analy|solv/i },
+    { name: 'Cultural Fit', regex: /cultur|fit|team|value|adapt/i }
+  ];
+  
+  let html = '<div class="space-y-6">';
+  
+  // Analyze each category
+  categories.forEach(category => {
+    // Extract sentences related to this category
+    const sentences = summary.match(new RegExp(`[^.!?]*(?<=[.!?\\s])(${category.regex.source})[^.!?]*[.!?]`, 'gi')) || [];
+    
+    // Generate a score based on positive/negative language
+    let score = 75; // Default baseline
+    const positiveTerms = /good|great|excellent|strong|well|impressive|clear|demonstrated/i;
+    const negativeTerms = /improve|lack|weak|miss|unclear|could|should/i;
+    
+    sentences.forEach(sentence => {
+      if (positiveTerms.test(sentence)) score += 5;
+      if (negativeTerms.test(sentence)) score -= 5;
+    });
+    
+    // Clamp score between 60-95
+    score = Math.max(60, Math.min(95, score));
+    
+    // Generate feedback text
+    let feedbackText = 'No specific feedback available for this category.';
+    if (sentences.length > 0) {
+      // Use the most relevant sentence
+      feedbackText = sentences[0].trim();
+      // Add a second sentence if available
+      if (sentences.length > 1) {
+        feedbackText += ' ' + sentences[1].trim();
+      }
+    }
+    
+    html += `
+      <div class="glass-card rounded-xl p-4 border border-white/10">
+        <h4 class="font-semibold mb-2">${category.name}</h4>
+        <div class="flex items-center mb-2">
+          <div class="flex-1 progress-bar">
+            <div class="progress-value" style="width: ${score}%"></div>
+          </div>
+          <span class="ml-3 font-medium">${score}%</span>
+        </div>
+        <p class="text-sm text-white/70">${feedbackText}</p>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  return html;
+}
+
+    // Parse summary content to extract job requirements (mock implementation)
+    function parseJobRequirements(jobDescription) {
+      if (!jobDescription) return [];
+      
+      const requirements = [];
+      
+      // Look for common requirement patterns
+      const requirementPatterns = [
+        /requirements/i, 
+        /qualifications/i, 
+        /skills|abilities/i,
+        /experience/i,
+        /education/i
+      ];
+      
+      let found = false;
+      for (const pattern of requirementPatterns) {
+        if (pattern.test(jobDescription)) {
+          found = true;
+          break;
+        }
+      }
+      
+      if (found) {
+        // Very simplified parsing - extract bullet points or numbered items
+        const bullets = jobDescription.match(/(?:\*|\-|\d+\.)\s*([^*\n]+)/g) || [];
+        bullets.forEach(bullet => {
+          const cleaned = bullet.replace(/(?:\*|\-|\d+\.)\s*/, '').trim();
+          if (cleaned.length > 10) requirements.push(cleaned);
+        });
+      }
+      
+      // If we can't extract requirements properly, return mock requirements
+      if (requirements.length === 0) {
+        const mockRequirements = [
+          "3+ years of relevant experience",
+          "Bachelor's degree in related field",
+          "Strong communication skills",
+          "Proficiency in required technologies",
+          "Problem-solving abilities",
+          "Teamwork and collaboration",
+          "Attention to detail",
+          "Time management skills"
+        ];
+        return mockRequirements;
+      }
+      
+      return requirements.slice(0, 8); // Limit to top 8
+    }
+    
+    $(document).ready(function() {
+      // Tab switching
+      $('.tab').on('click', function() {
+        const tabId = $(this).data('tab');
+        switchTab(tabId);
+      });
+      
+      // Summary tab switching
+      $('.summary-tab').on('click', function() {
+        const tabId = $(this).data('tab');
+        switchSummaryTab(tabId);
+      });
+      
+      // View resume summary
+      $('#viewFullSummaryBtn').on('click', function() {
+        openModal('resumeSummaryModal');
+      });
+      
+      // Show interview summary modal
+      $('.view-summary-btn').on('click', function() {
+        const roundId = $(this).data('round-id');
+        const roundName = $(this).data('round-name');
+        
+        // Update modal title
+        $('#interviewSummaryModal h3').text(`${roundName} Round Summary`);
+        
+        // Get the summary from our object and display it
+        const summary = roundSummaries[roundId] || 'No summary available for this round.';
+        $('#summaryContent').html(summary.replace(/\n/g, '<br>'));
+        
+        // Extract key points from summary
+        const keyPoints = extractKeyPoints(summary);
+        
+        // Update strengths and improvements lists
+        $('#keyStrengths').empty();
+        keyPoints.strengths.forEach(strength => {
+          $('#keyStrengths').append(`<li class="flex items-start">
+            <i class="fas fa-check text-green-500 mr-2 mt-1 flex-shrink-0"></i>
+            <span>${strength}</span>
+          </li>`);
+        });
+        
+        $('#areasToImprove').empty();
+        keyPoints.improvements.forEach(improvement => {
+          $('#areasToImprove').append(`<li class="flex items-start">
+            <i class="fas fa-arrow-right text-yellow-500 mr-2 mt-1 flex-shrink-0"></i>
+            <span>${improvement}</span>
+          </li>`);
+        });
+        
+        // Generate mock data for questions and feedback tabs
+        $('#questionsContent').html(generateMockQA(roundName));
+        $('#feedbackContent').html(generateMockFeedback());
+        
+        // Show the modal
+        openModal('interviewSummaryModal');
+        
+        // Reset to the summary tab
+        switchSummaryTab('summary');
+
+        
+      });
+      
+      // Parse job description to extract requirements
+      // This would normally happen server-side, but we're simulating it here
+      const jobDescription = document.querySelector('.prose').innerHTML;
+      const requirements = parseJobRequirements(jobDescription);
+      
+      // Populate requirements in the job details tab
+      const keyRequirementsDiv = document.getElementById('keyRequirements');
+      if (keyRequirementsDiv && requirements.length > 0) {
+        keyRequirementsDiv.innerHTML = '';
+        requirements.forEach(req => {
+          const reqDiv = document.createElement('div');
+          reqDiv.className = 'bg-white/5 p-3 rounded-lg flex items-start';
+          reqDiv.innerHTML = `
+            <i class="fas fa-check-circle text-[#8A2BE2] mr-2 mt-1 flex-shrink-0"></i>
+            <span class="text-sm text-white/80">${req}</span>
+          `;
+          keyRequirementsDiv.appendChild(reqDiv);
+        });
+      }
+      
+      // Practice again button
+      $('#practiceAgainBtn').on('click', function() {
+        // Get current round name from modal title
+        const roundName = $('#interviewSummaryModal h3').text().replace(' Round Summary', '');
+        
+        // Close the modal
+        closeModal('interviewSummaryModal');
+        
+        // Redirect to the start page for this round
+        window.location.href = `/space/<%= space._id %>/round/${roundName}/start`;
+      });
+      
+      // Close modals
+      $('.modal-close').on('click', function() {
+        const modalId = $(this).closest('.modal').attr('id');
+        closeModal(modalId);
+      });
+      
+      // Close modal when clicking outside
+      $('.modal').on('click', function(e) {
+        if ($(e.target).hasClass('modal')) {
+          const modalId = $(this).attr('id');
+          closeModal(modalId);
+        }
+      });
+      
+      // Close modal with ESC key
+      $(document).keydown(function(e) {
+        if (e.key === "Escape") {
+          $('.modal:not(.hidden)').each(function() {
+            const modalId = $(this).attr('id');
+            closeModal(modalId);
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
